@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -23,7 +24,7 @@ public interface DeckEntityDao {
 
     //select all
     @Query("SELECT * FROM deck ORDER BY deckId")
-    List<DeckEntity> getAllDeckEntity();
+    LiveData<List<DeckEntity>> getAllDeckEntity();
 
     //delete
     @Delete

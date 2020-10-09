@@ -30,11 +30,11 @@ public interface CardEntityDao {
 
     //get cards with text
     @Query("SELECT * FROM card WHERE text LIKE '%' || :text || '%'")
-    List<CardEntity> getCardsWithText(String text);
+    LiveData<List<CardEntity>> getCardsWithText(String text);
 
     //get all cards
     @Query("SELECT * FROM card")
-    List<CardEntity> getAllCardEntity();
+    LiveData<List<CardEntity>> getAllCardEntity();
 
     //delete card
     @Delete
