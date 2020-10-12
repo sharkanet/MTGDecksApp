@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "cardInDeck",
+        indices = {@Index("cardId_FK"),@Index("deckId_FK")},
         foreignKeys = {@ForeignKey(entity = CardEntity.class,
                              parentColumns = "cardId", childColumns = "cardId_FK", onDelete = CASCADE),
                         @ForeignKey(entity = DeckEntity.class,
