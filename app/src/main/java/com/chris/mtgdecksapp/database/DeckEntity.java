@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp.database;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -36,5 +37,11 @@ public class DeckEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

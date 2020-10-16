@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
+import com.chris.mtgdecksapp.model.CardInDeck;
 import com.chris.mtgdecksapp.model.Deck;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class MTGAppRepository {
     private LiveData<List<SupertypeEntity>> allSuperTypeEntity;
     private LiveData<List<TypeEntity>> allTypeEntity;
 
+    private LiveData<List<CardInDeck>> cardsInDeck;
+
 //singleton
     private static MTGAppRepository instance;
     private static final Object LOCK = new Object();
@@ -51,6 +54,9 @@ public class MTGAppRepository {
 //private constructor
     private  MTGAppRepository (Context context){
         mtgAppDatabase = MTGAppDatabase.getDatabase(context);
+        //TODO
+        putFakeData();
+
         //retrieve all lists from database
         allCardEntity = mtgAppDatabase.CardEntityDao().getAllCardEntity();
         allCardInDeckEntity = mtgAppDatabase.CardInDeckEntityDao().getAllCardInDeckEntity();
@@ -62,6 +68,11 @@ public class MTGAppRepository {
         allTypeEntity =mtgAppDatabase.TypeEntityDao().getAllTypeEntity();
     }
 //TODO
+    //retrieve list of card entity for a deck id
+    public void getCardsInDeckWithId(int id){
+        cardsInDeck = mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
+    }
+
 ////insert
     public void insertCardEntity(CardEntity cardEntity){
         executor.execute(()->{
@@ -220,4 +231,24 @@ public void deleteCardEntity(CardEntity cardEntity){
         return allTypeEntity;
     }
 
+    public LiveData<List<CardInDeck>> getCardsInDeck() {
+        return cardsInDeck;
+    }
+
+    //fake data
+    private void putFakeData(){
+        insertDeckEntity(new DeckEntity(1,"placeholder 1"));
+        insertDeckEntity(new DeckEntity(2,"placeholder 2"));
+        insertDeckEntity(new DeckEntity(3,"placeholder 3"));
+        insertCardEntity(new CardEntity(1, "placeholder 1", "{R}{R}{R}{3}","placeholder text 1", "n/a", "n/a", "n/a"));
+        insertCardEntity(new CardEntity(2, "placeholder 2", "{R}{G}{B}{7}","placeholder text 2", "n/a", "n/a", "n/a"));
+        insertCardEntity(new CardEntity(3, "placeholder 3", "{W}{W}{W}{1}","placeholder text 3", "n/a", "n/a", "n/a"));
+        insertCardInDeckEntity(new CardInDeckEntity(1, 1, 1, 1,true));
+        insertCardInDeckEntity(new CardInDeckEntity(2, 2, 1, 2,true));
+        insertCardInDeckEntity(new CardInDeckEntity(3, 2, 2, 2,true));
+        insertCardInDeckEntity(new CardInDeckEntity(4, 3, 2, 1,true));
+        insertCardInDeckEntity(new CardInDeckEntity(5, 1, 3, 1,true));
+        insertCardInDeckEntity(new CardInDeckEntity(6, 3, 3, 99,true));
+
+    }
 }

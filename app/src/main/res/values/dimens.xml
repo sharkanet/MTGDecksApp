@@ -3,4 +3,9 @@
     <dimen name="main_button_space">25dp</dimen>
     <dimen name="text_size_button">14pt</dimen>
     <dimen name="padding_button">25dp</dimen>
+    <dimen name="recyclerview_card_text_margin">5dp</dimen>
+    <dimen name="recyclerview_card_margin">20dp</dimen>
+    <dimen name="inputFieldMargin">25dp</dimen>
+    <dimen name="inputFieldTextSize">18sp</dimen>
+    <dimen name="listItemBottomMargin">20dp</dimen>
 </resources>
