@@ -3,11 +3,13 @@ package com.chris.mtgdecksapp.database;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "game",
+        indices = {@Index("deckId_FK")},
         foreignKeys = @ForeignKey(entity = DeckEntity.class, parentColumns = "deckId", childColumns = "deckId_FK", onDelete = CASCADE)
 )
 public class GameEntity {

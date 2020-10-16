@@ -22,6 +22,7 @@ public abstract class MTGAppDatabase extends RoomDatabase {
     public abstract GameEntityDao GameEntityDao();
     public abstract SupertypeEntityDao SupertypeEntityDao();
     public abstract TypeEntityDao TypeEntityDao();
+    public abstract CardInDeckDao CardInDeckDao();
 
     private static final String DATABASE_NAME = "MTGAppDB.db";
     private static final int NUMBER_OF_THREADS = 4;

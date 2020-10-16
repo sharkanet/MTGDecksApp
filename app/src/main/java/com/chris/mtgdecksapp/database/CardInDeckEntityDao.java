@@ -39,4 +39,6 @@ public interface CardInDeckEntityDao {
     //delete all
     @Query("DELETE FROM cardInDeck")
     void deleteAllCardInDeckEntity();
+
+
 }

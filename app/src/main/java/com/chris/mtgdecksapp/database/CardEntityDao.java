@@ -43,4 +43,5 @@ public interface CardEntityDao {
     //delete all cards
     @Query("DELETE FROM card")
     void deleteAllCardEntity();
+
 }
