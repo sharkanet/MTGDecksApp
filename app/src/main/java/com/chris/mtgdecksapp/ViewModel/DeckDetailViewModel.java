@@ -23,8 +23,9 @@ public class DeckDetailViewModel extends AndroidViewModel {
     }
 
     public void loadDeck(int id){
-        repository.getCardsInDeckWithId(id);
-        cardsInDeck = repository.getCardsInDeck();
+//        repository.getCardsInDeckWithId(id);
+//        cardsInDeck = repository.getCardsInDeck();
+        cardsInDeck = repository.getCardsInDeckWithId(id);
     }
 
     public LiveData<List<CardInDeck>> getCardsInDeck() {

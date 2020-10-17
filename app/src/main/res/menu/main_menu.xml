@@ -5,4 +5,12 @@
         android:title="placeholder"
         app:showAsAction="never"
         />
+    <item android:id="@+id/clear_db"
+        android:title="Clear DB"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/put_fake_data"
+        android:title="Fake Data"
+        app:showAsAction="never"
+        />
 </menu>

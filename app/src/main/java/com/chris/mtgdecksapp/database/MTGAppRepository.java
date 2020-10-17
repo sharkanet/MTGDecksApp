@@ -55,7 +55,6 @@ public class MTGAppRepository {
     private  MTGAppRepository (Context context){
         mtgAppDatabase = MTGAppDatabase.getDatabase(context);
         //TODO
-        putFakeData();
 
         //retrieve all lists from database
         allCardEntity = mtgAppDatabase.CardEntityDao().getAllCardEntity();
@@ -69,8 +68,11 @@ public class MTGAppRepository {
     }
 //TODO
     //retrieve list of card entity for a deck id
-    public void getCardsInDeckWithId(int id){
-        cardsInDeck = mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
+//    public void getCardsInDeckWithId(int id){
+//        cardsInDeck = mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
+//    }
+    public LiveData<List<CardInDeck>> getCardsInDeckWithId(int id){
+        return mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
     }
 
 ////insert
@@ -199,6 +201,53 @@ public void deleteCardEntity(CardEntity cardEntity){
         });
     }
 
+  //delete all from database
+    public void clearDB(){
+        //deleteAllCardEntity();
+       // deleteAllDeckEntity();
+        deleteAllCardInDeckEntity();
+    }
+    public void deleteAllDeckEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.DeckEntityDao().deleteAllDeckEntity();
+        });
+    }
+    public void deleteAllCardEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.CardEntityDao().deleteAllCardEntity();
+        });
+    }
+    public void deleteAllCardInDeckEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.CardInDeckEntityDao().deleteAllCardInDeckEntity();
+        });
+    }
+    public void deleteAllSupertypeEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.SupertypeEntityDao().deleteAllSupertypeEntity();
+        });
+    }
+    public void deleteAllTypeEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.TypeEntityDao().deleteAllTypeEntity();
+        });
+    }
+    public void deleteAllCardSupertypeEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.CardSupertypeEntityDao().deleteAllCardSupertypeEntity();
+        });
+    }
+    public void deleteAllCardTypeEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.CardTypeEntityDao().deleteAllCardTypeEntity();
+        });
+    }
+    public void deleteAllGameEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.GameEntityDao().deleteAllGameEntity();
+        });
+    }
+
 
 //getters
     public LiveData<List<CardEntity>> getAllCardEntity() {
@@ -236,19 +285,22 @@ public void deleteCardEntity(CardEntity cardEntity){
     }
 
     //fake data
-    private void putFakeData(){
+    public void putFakeData(){
+        System.out.println("1");
+      //  clearDB();
         insertDeckEntity(new DeckEntity(1,"placeholder 1"));
         insertDeckEntity(new DeckEntity(2,"placeholder 2"));
         insertDeckEntity(new DeckEntity(3,"placeholder 3"));
         insertCardEntity(new CardEntity(1, "placeholder 1", "{R}{R}{R}{3}","placeholder text 1", "n/a", "n/a", "n/a"));
-        insertCardEntity(new CardEntity(2, "placeholder 2", "{R}{G}{B}{7}","placeholder text 2", "n/a", "n/a", "n/a"));
-        insertCardEntity(new CardEntity(3, "placeholder 3", "{W}{W}{W}{1}","placeholder text 3", "n/a", "n/a", "n/a"));
+        insertCardEntity(new CardEntity(2, "placeholder 2", "{R}{G}{B}{7}","placeholder text 2 \n more text 2", "n/a", "n/a", "n/a"));
+        insertCardEntity(new CardEntity(3, "placeholder 3", "{W}{W}{W}{1}","placeholder text 3 IS VERY LONG!! \nanother \npotato", "n/a", "n/a", "n/a"));
         insertCardInDeckEntity(new CardInDeckEntity(1, 1, 1, 1,true));
         insertCardInDeckEntity(new CardInDeckEntity(2, 2, 1, 2,true));
         insertCardInDeckEntity(new CardInDeckEntity(3, 2, 2, 2,true));
         insertCardInDeckEntity(new CardInDeckEntity(4, 3, 2, 1,true));
         insertCardInDeckEntity(new CardInDeckEntity(5, 1, 3, 1,true));
         insertCardInDeckEntity(new CardInDeckEntity(6, 3, 3, 99,true));
+        System.out.println("put fake data");
 
     }
 }

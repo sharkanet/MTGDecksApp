@@ -25,7 +25,7 @@ public abstract class MTGAppDatabase extends RoomDatabase {
     public abstract CardInDeckDao CardInDeckDao();
 
     private static final String DATABASE_NAME = "MTGAppDB.db";
-    private static final int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = 1;
 
     private static volatile MTGAppDatabase instance;
     private static final Object LOCK = new Object();
