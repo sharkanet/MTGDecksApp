@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.DECK_WINS_KEY;
 
 public class DecksActivity extends AppCompatActivity {
     private ActivityDecksBinding binding;
@@ -42,8 +45,6 @@ public class DecksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityDecksBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
 
         //setup toolbar
         toolbarBinding = binding.toolbar;
@@ -97,6 +98,7 @@ public class DecksActivity extends AppCompatActivity {
                 toast.show();
                 Intent intent = new Intent(DecksActivity.this, DeckDetailActivity.class);
                 intent.putExtra(DECK_ID_KEY, deck.getDeckId());
+                intent.putExtra(DECK_NAME_KEY, deck.getName());
                 startActivity(intent);
         });
     }
@@ -106,4 +108,6 @@ public class DecksActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.main_menu);
         return true;
     }
+
+
 }

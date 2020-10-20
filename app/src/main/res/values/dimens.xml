@@ -8,4 +8,5 @@
     <dimen name="inputFieldMargin">25dp</dimen>
     <dimen name="inputFieldTextSize">18sp</dimen>
     <dimen name="listItemBottomMargin">20dp</dimen>
+    <dimen name="recycler_view_side_margin">10dp</dimen>
 </resources>

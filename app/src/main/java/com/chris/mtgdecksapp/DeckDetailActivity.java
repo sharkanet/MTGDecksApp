@@ -2,7 +2,9 @@ package com.chris.mtgdecksapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
 
 
 public class DeckDetailActivity extends AppCompatActivity {
@@ -33,7 +36,8 @@ public class DeckDetailActivity extends AppCompatActivity {
     private TextView winsText, losesText;
     private List<CardInDeck> cards = new ArrayList<>();
     private DeckDetailViewModel viewModel;
-    private int deckId;
+    private int deckId, wins, loses;
+    private String deckName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +48,25 @@ public class DeckDetailActivity extends AppCompatActivity {
         losesText = binding.losesText;
         recyclerView = binding.recyclerView;
 
-        //setup toolbar
-        toolbarBinding = binding.toolbar;
-        setSupportActionBar(toolbarBinding.toolbar);
-        getSupportActionBar().setTitle("Deck View");
 
         initRecyclerView();
         initViewModel();
+//setup toolbar
+        toolbarBinding = binding.toolbar;
+        setSupportActionBar(toolbarBinding.toolbar);
+        getSupportActionBar().setTitle(deckName);
+
+        //load wins and loses
+        setTextWinsLoses();
 
 
 
+    }
+
+    private void setTextWinsLoses() {
+        //TODO
+        //Set win/lose fields
+        //search games, count wins, count loses
     }
 
     private void initRecyclerView() {
@@ -83,6 +96,7 @@ public class DeckDetailActivity extends AppCompatActivity {
             System.out.println("something went wrong - should never be called - DeckDetailActivity.InitViewModel()");
         } else {
             deckId = extras.getInt(DECK_ID_KEY);
+            deckName = extras.getString(DECK_NAME_KEY);
             viewModel.loadDeck(deckId);
         }
         viewModel.getCardsInDeck().observe(this, cardObserver);
@@ -99,4 +113,9 @@ public class DeckDetailActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.detail_menu);
         return true;
     }
+
+//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+//    public void loadDeck(){
+//        viewModel.loadDeck(deckId);
+//    }
 }

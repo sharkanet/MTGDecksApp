@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 
 import com.chris.mtgdecksapp.database.MTGAppRepository;
@@ -38,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        btnToCards = binding.button2;
+        btnToCards.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, CardsActivity.class);
+            startActivity(intent);
+        });
+
+
     }
 
 
@@ -46,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = toolbarBinding.toolbar;
         toolbar.inflateMenu(R.menu.main_menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.put_fake_data:
+                repository.putFakeData();
+                return true;
+            case R.id.clear_db:
+                repository.clearDB();
+            default:
+                return false;
+        }
     }
 
 

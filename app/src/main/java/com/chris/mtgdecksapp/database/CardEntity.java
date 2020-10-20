@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp.database;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -98,5 +99,11 @@ public class CardEntity {
 
     public void setLoyalty(String loyalty) {
         this.loyalty = loyalty;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }
