@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".CardAddActivity">
 
     <include
@@ -14,90 +16,285 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewName"
-        style="@style/FieldLabelText"
-        android:layout_width="match_parent"
+    <ScrollView
         android:layout_height="wrap_content"
-        android:text="Card Name:"
+        android:layout_width="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/input_layout_1"
-        style="@style/TextInputMargins"
-        app:layout_constraintStart_toStartOf="@+id/textViewName"
-        app:layout_constraintTop_toBottomOf="@+id/textViewName">
-
-        <com.google.android.material.textfield.TextInputEditText
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+            android:id="@+id/textViewName"
+            style="@style/FieldLabelText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Card Name"
-            android:id="@+id/editTextName"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textSize="@dimen/inputFieldTextSize" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:text="Card Name:"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewManaCost"
-        style="@style/FieldLabelText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Card Mana Cost:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_1" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input_layout_1"
+                style="@style/TextInputMargins"
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewName">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextInputMargins"
-        android:id="@+id/input_layout_2"
-        app:layout_constraintStart_toStartOf="@+id/textViewName"
-        app:layout_constraintTop_toBottomOf="@+id/textViewManaCost">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Card Name"
+                    android:id="@+id/editTextName"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/inputFieldTextSize" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Card Mana Cost"
-            android:id="@+id/editTextManaCost"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textSize="@dimen/inputFieldTextSize" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/textViewManaCost"
+                style="@style/FieldLabelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Mana Cost:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_1" />
 
-    <TextView
-        android:id="@+id/textViewText"
-        style="@style/FieldLabelText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Card Text:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_2" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputMargins"
+                android:id="@+id/input_layout_2"
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewManaCost">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextInputMargins"
-        android:id="@+id/input_layout_3"
-        app:layout_constraintStart_toStartOf="@+id/textViewName"
-        app:layout_constraintTop_toBottomOf="@+id/textViewText">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Card Mana Cost"
+                    android:id="@+id/editTextManaCost"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/inputFieldTextSize" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Card Text"
-            android:id="@+id/editTextText"
-            android:inputType="textMultiLine"
-            android:scrollHorizontally="false"
-            android:textSize="@dimen/inputFieldTextSize" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/textViewSupertype"
+                style="@style/FieldLabelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Supertypes:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_2" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputMargins"
+                android:id="@+id/input_layout_3"
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSupertype">
+
+                <com.hootsuite.nachos.NachoTextView
+                    android:id="@+id/nacho_text_view_supertype"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:fitsSystemWindows="true"
+                    android:textSize="@dimen/inputFieldTextSize" />
+<!--
+              <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Supertypes"
+                    android:id="@+id/editTextSupertype"
+                    android:inputType="textMultiLine"
+                    android:focusable="false"
+                    android:longClickable="false"
+                    android:scrollHorizontally="false"
+                    android:textSize="@dimen/inputFieldTextSize" /> -->
+<!--
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textTextSupertype"
+                    android:scrollHorizontally="false"
+                    android:textSize="@dimen/inputFieldTextSize"
+                    android:layout_marginTop="@dimen/text_view_margins"
+                    android:layout_marginBottom="@dimen/text_view_margins"
+                    android:text="Supertypes"/>-->
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/textViewType"
+                style="@style/FieldLabelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Types:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_3" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputMargins"
+                android:id="@+id/input_layout_4"
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewType">
+
+                <com.hootsuite.nachos.NachoTextView
+                    android:id="@+id/nacho_text_view_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:fitsSystemWindows="true"
+                    android:textSize="@dimen/inputFieldTextSize" />
+<!--
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Types"
+                    android:id="@+id/editTextType"
+                    android:inputType="textMultiLine"
+                    android:focusable="false"
+                    android:scrollHorizontally="false"
+                    android:textSize="@dimen/inputFieldTextSize" /> -->
+<!--
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textTextType"
+                    android:scrollHorizontally="false"
+                    android:textSize="@dimen/inputFieldTextSize"
+                    android:layout_marginTop="@dimen/text_view_margins"
+                    android:layout_marginBottom="@dimen/text_view_margins"
+                    android:text="Types"/> -->
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textViewText"
+                style="@style/FieldLabelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Text:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_4" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputMargins"
+                android:id="@+id/input_layout_5"
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Card Text"
+                    android:id="@+id/editTextText"
+                    android:inputType="textMultiLine"
+                    android:scrollHorizontally="false"
+                    android:textSize="@dimen/inputFieldTextSize" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textViewPower"
+                style="@style/FieldLabelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Power:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_5" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputMargins"
+                android:id="@+id/input_layout_6"
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPower">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Card Power"
+                    android:id="@+id/editTextPower"
+                    android:text="@string/n_a"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/inputFieldTextSize" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textViewToughness"
+                style="@style/FieldLabelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Toughness:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_6" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputMargins"
+                android:id="@+id/input_layout_7"
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewToughness">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Card Toughness"
+                    android:id="@+id/editTextToughness"
+                    android:text="@string/n_a"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/inputFieldTextSize" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textViewLoyalty"
+                style="@style/FieldLabelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Card Loyalty:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_layout_7" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputMargins"
+                android:id="@+id/input_layout_8"
+
+                app:layout_constraintStart_toStartOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewLoyalty">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Card Loyalty"
+                    android:id="@+id/editTextLoyalty"
+                    android:text="@string/n_a"
+                    android:layout_marginBottom="100dp"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/inputFieldTextSize" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"

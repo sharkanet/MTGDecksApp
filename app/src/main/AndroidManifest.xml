@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".CardAddActivity"></activity>
-        <activity android:name=".CardsActivity" />
+        <activity android:name=".AddCardSupertypeActivity"></activity>
+        <activity android:name=".CardAddActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"  />
+        <activity android:name=".CardsActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".DeckDetailActivity" />
         <activity android:name=".DeckAdd_Activity" />
         <activity android:name=".DecksActivity" />

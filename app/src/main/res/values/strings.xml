@@ -3,4 +3,6 @@
     <string name="cards">Cards</string>
     <string name="play">Play</string>
     <string name="decks">Decks</string>
+    <string name="n_a">n/a</string>
+    <string name="text">Chip Text</string>
 </resources>

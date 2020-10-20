@@ -14,7 +14,7 @@ import java.util.List;
 public interface SupertypeEntityDao {
     //insert
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertSupertypeEntity(SupertypeEntity supertypeEntity);
+    long insertSupertypeEntity(SupertypeEntity supertypeEntity);
 
     //update
     @Update(onConflict = OnConflictStrategy.REPLACE)

@@ -3,13 +3,14 @@ package com.chris.mtgdecksapp.database;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.chris.mtgdecksapp.model.CardInDeck;
-import com.chris.mtgdecksapp.model.Deck;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MTGAppRepository {
 //    private CardEntityDao cardEntityDao;
@@ -36,6 +37,10 @@ public class MTGAppRepository {
     private LiveData<List<TypeEntity>> allTypeEntity;
 
     private LiveData<List<CardInDeck>> cardsInDeck;
+
+//    private Map<String, Integer> mapCardNameToId = new HashMap<>();
+//    private Map<String, Integer> mapTypeToId = new HashMap<>();
+//    private Map<String, Integer> mapSupertypeToId = new HashMap<>();
 
 //singleton
     private static MTGAppRepository instance;
@@ -65,8 +70,41 @@ public class MTGAppRepository {
         allGameEntity = mtgAppDatabase.GameEntityDao().getAllGameEntity();
         allSuperTypeEntity = mtgAppDatabase.SupertypeEntityDao().getAllSupertypeEntity();
         allTypeEntity =mtgAppDatabase.TypeEntityDao().getAllTypeEntity();
+
+        //setup maps
+//        setupMaps();
     }
-//TODO
+/*
+    private void setupMaps() {
+        final Observer<List<CardEntity>> cardObserver = newCards ->{
+            mapCardNameToId.clear();
+            newCards.forEach( cardEntity -> {
+                mapCardNameToId.put(cardEntity.getName(), cardEntity.getCardId());
+            });
+        };
+        allCardEntity.observeForever(cardObserver);
+
+
+        final Observer<List<TypeEntity>> typeObserver = newTypes ->{
+            mapTypeToId.clear();
+            newTypes.forEach( typeEntity -> {
+                mapCardNameToId.put(typeEntity.getType(), typeEntity.getTypeId());
+            });
+        };
+        allTypeEntity.observeForever(typeObserver);
+
+        final Observer<List<SupertypeEntity>> superTypeObserver = newSupertypes ->{
+            mapSupertypeToId.clear();
+            newSupertypes.forEach( supertypeEntity -> {
+                mapCardNameToId.put(supertypeEntity.getSupertype(), supertypeEntity.getSupertypeId());
+            });
+        };
+        allSuperTypeEntity.observeForever(superTypeObserver);
+    }
+
+ */
+
+    //TODO
     //retrieve list of card entity for a deck id
 //    public void getCardsInDeckWithId(int id){
 //        cardsInDeck = mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
@@ -75,10 +113,35 @@ public class MTGAppRepository {
         return mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
     }
 
+
+    //retrieve full lists of entities
+    public LiveData<List<CardEntity>> retrieveAllCardEntity() {
+        return mtgAppDatabase.CardEntityDao().getAllCardEntity();
+    }
+    public LiveData<List<CardInDeckEntity>> retrieveAllCardInDeckEntity() {
+       return allCardInDeckEntity = mtgAppDatabase.CardInDeckEntityDao().getAllCardInDeckEntity();
+    }
+    public LiveData<List<CardSupertypeEntity>> retrieveAllCardSupertypeEntity() {
+        return allCardSupertypeEntity = mtgAppDatabase.CardSupertypeEntityDao().getAllCardSupertypeEntity();
+    }
+    public LiveData<List<CardTypeEntity>> retrieveAllCardTypeEntity() {
+        return mtgAppDatabase.CardTypeEntityDao().getAllCardTypeEntity();
+    }
+    public LiveData<List<DeckEntity>> retrieveAllDeckEntity(){
+            return mtgAppDatabase.DeckEntityDao().getAllDeckEntity();
+    }
+//    return mtgAppDatabase.GameEntityDao().getAllGameEntity();
+//    return mtgAppDatabase.SupertypeEntityDao().getAllSupertypeEntity();
+//    return mtgAppDatabase.TypeEntityDao().getAllTypeEntity();
+
 ////insert
+    public long insertCardEntityWithReturn(CardEntity cardEntity){
+        return mtgAppDatabase.CardEntityDao().insertCardEntity(cardEntity);
+    }
+
     public void insertCardEntity(CardEntity cardEntity){
         executor.execute(()->{
-            mtgAppDatabase.CardEntityDao().insertCardEntity(cardEntity);
+           mtgAppDatabase.CardEntityDao().insertCardEntity(cardEntity);
         });
     }
     public void insertCardInDeckEntity(CardInDeckEntity cardInDeckEntity){
@@ -106,6 +169,9 @@ public class MTGAppRepository {
             mtgAppDatabase.GameEntityDao().insertGameEntity(gameEntity);
         });
     }
+    public long insertSupertypeEntityWithReturn(SupertypeEntity supertypeEntity){
+         return  mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(supertypeEntity);
+    }
     public void insertSupertypeEntity(SupertypeEntity supertypeEntity){
         executor.execute(()->{
             mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(supertypeEntity);
@@ -115,6 +181,9 @@ public class MTGAppRepository {
         executor.execute(()->{
             mtgAppDatabase.TypeEntityDao().insertTypeEntity(typeEntity);
         });
+    }
+    public long insertTypeEntityWithReturn(TypeEntity typeEntity){
+        return  mtgAppDatabase.TypeEntityDao().insertTypeEntity(typeEntity);
     }
 
 ////update
@@ -205,7 +274,8 @@ public void deleteCardEntity(CardEntity cardEntity){
     public void clearDB(){
         //deleteAllCardEntity();
        // deleteAllDeckEntity();
-        deleteAllCardInDeckEntity();
+        //deleteAllCardInDeckEntity();
+        deleteAllSupertypeEntity();
     }
     public void deleteAllDeckEntity(){
         executor.execute(()->{
@@ -248,6 +318,29 @@ public void deleteCardEntity(CardEntity cardEntity){
         });
     }
 
+    //
+    public void deleteCardSupertypeEntitiesForCardId(int cardId){
+        executor.execute(()->{
+            mtgAppDatabase.CardSupertypeEntityDao().deleteCardSupertypeEntityForCardId(cardId);
+        });
+    }
+    public void deleteCardTypeEntitiesForCardId(int cardId){
+        executor.execute(()->{
+            mtgAppDatabase.CardTypeEntityDao().deleteCardTypeEntityForCardId(cardId);
+        });
+    }
+
+    public MutableLiveData<CardEntity> getCardEntityByName(String cardName){
+        MutableLiveData<CardEntity> cardEntityMutableLiveData = new MutableLiveData<>();
+        executor.execute(()->{
+            cardEntityMutableLiveData.postValue(mtgAppDatabase.CardEntityDao().getCardEntityByName(cardName));
+        });
+        return cardEntityMutableLiveData;
+    }
+
+    public CardEntity getCardEntityByName1(String cardName) {
+       return mtgAppDatabase.CardEntityDao().getCardEntityByName(cardName);
+    }
 
 //getters
     public LiveData<List<CardEntity>> getAllCardEntity() {
@@ -284,10 +377,15 @@ public void deleteCardEntity(CardEntity cardEntity){
         return cardsInDeck;
     }
 
+//    public Map<String, Integer> getMapCardNameToId() {        return mapCardNameToId;    }
+//
+//    public Map<String, Integer> getMapTypeToId() {        return mapTypeToId;    }
+//
+//    public Map<String, Integer> getMapSupertypeToId() {        return mapSupertypeToId;    }
+
     //fake data
     public void putFakeData(){
-        System.out.println("1");
-      //  clearDB();
+       // clearDB();
         insertDeckEntity(new DeckEntity(1,"placeholder 1"));
         insertDeckEntity(new DeckEntity(2,"placeholder 2"));
         insertDeckEntity(new DeckEntity(3,"placeholder 3"));
@@ -300,7 +398,25 @@ public void deleteCardEntity(CardEntity cardEntity){
         insertCardInDeckEntity(new CardInDeckEntity(4, 3, 2, 1,true));
         insertCardInDeckEntity(new CardInDeckEntity(5, 1, 3, 1,true));
         insertCardInDeckEntity(new CardInDeckEntity(6, 3, 3, 99,true));
+        insertSupertypeEntity(new SupertypeEntity(1, "Basic"));
+        insertSupertypeEntity(new SupertypeEntity(2, "Land"));
+        insertSupertypeEntity(new SupertypeEntity(3,"Creature"));
+        insertSupertypeEntity(new SupertypeEntity(4,"Artifact"));
+        insertSupertypeEntity(new SupertypeEntity(5,"Enchantment"));
+        insertSupertypeEntity(new SupertypeEntity(6, "Planeswalker"));
+        insertSupertypeEntity(new SupertypeEntity(7, "Instant"));
+        insertSupertypeEntity(new SupertypeEntity(8, "Sorcery"));
+        insertSupertypeEntity(new SupertypeEntity(9, "Tribal"));
+        insertSupertypeEntity(new SupertypeEntity(10, "Legendary"));
+        insertTypeEntity(new TypeEntity(1, "Human"));
+        insertTypeEntity(new TypeEntity(2, "Jace"));
+        insertTypeEntity(new TypeEntity(3, "Forest"));
+        insertTypeEntity(new TypeEntity(4, "Equipment"));
+
+
         System.out.println("put fake data");
 
     }
+
+
 }

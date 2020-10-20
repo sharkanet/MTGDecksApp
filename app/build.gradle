@@ -51,6 +51,7 @@ dependencies {
 
 // UI
     implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "com.hootsuite.android:nachos:1.1.1"
 
 // Testing
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"

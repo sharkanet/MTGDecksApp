@@ -24,6 +24,20 @@ public class CardEntity {
     }
 
 @Ignore
+    public CardEntity(String name, String manaCost, String text) {
+        this(name, manaCost, text, "n/a", "n/a", "/na");
+    }
+@Ignore
+    public CardEntity(String name, String manaCost, String text, String power, String toughness) {
+        this(name, manaCost, text, power, toughness, "n/a");
+    }
+
+@Ignore
+    public CardEntity(String name, String manaCost, String text, String loyalty) {
+        this(name, manaCost, text, "n/a", "n/a", loyalty);
+    }
+
+@Ignore
     public CardEntity(String name, String manaCost, String text, String power, String toughness, String loyalty) {
         this.name = name;
         this.manaCost = manaCost;

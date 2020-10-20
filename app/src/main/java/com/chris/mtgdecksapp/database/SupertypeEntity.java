@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp.database;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -9,9 +10,11 @@ public class SupertypeEntity {
     @PrimaryKey(autoGenerate = true)
     private int supertypeId;
     private String supertype;
+
 @Ignore
     public SupertypeEntity() {
     }
+
 @Ignore
     public SupertypeEntity(String supertype) {
         this.supertype = supertype;
@@ -36,5 +39,11 @@ public class SupertypeEntity {
 
     public void setSupertype(String supertype) {
         this.supertype = supertype;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return supertype;
     }
 }

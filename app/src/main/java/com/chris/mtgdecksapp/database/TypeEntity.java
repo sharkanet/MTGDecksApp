@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp.database;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -9,15 +10,15 @@ import androidx.room.PrimaryKey;
 public class TypeEntity {
     @PrimaryKey(autoGenerate = true)
     private int typeId;
-    private int type;
+    private String type;
 
-    public TypeEntity(int typeId, int type) {
+    public TypeEntity(int typeId, String type) {
         this.typeId = typeId;
         this.type = type;
     }
 
 @Ignore
-    public TypeEntity(int type) {
+    public TypeEntity(String type) {
         this.type = type;
     }
 @Ignore
@@ -32,11 +33,17 @@ public class TypeEntity {
         this.typeId = typeId;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return type;
     }
 }
