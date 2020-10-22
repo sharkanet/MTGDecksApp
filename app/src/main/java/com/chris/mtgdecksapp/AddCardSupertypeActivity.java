@@ -93,5 +93,7 @@ public class AddCardSupertypeActivity extends AppCompatActivity {
         adapter = new SupertypeAdapter(this,R.layout.supertype_list_item, supertypeEntities);
         nachoTextView.setAdapter(adapter);
         nachoTextView.addChipTerminator('\n',BEHAVIOR_CHIPIFY_ALL);
+        nachoTextView.setText("first second thrid");
+        nachoTextView.chipifyAllUnterminatedTokens();
     }
 }

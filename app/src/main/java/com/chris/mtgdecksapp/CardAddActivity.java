@@ -110,13 +110,26 @@ public class CardAddActivity extends AppCompatActivity {
                             supertypeName = chip.getText().toString();
                         } else supertypeName =(((SupertypeEntity) chip.getData()).getSupertype());
                         if(mapSupertypeToId.containsKey(supertypeName)){
-                            int chipId = mapSupertypeToId.get(((SupertypeEntity) chip.getData()).getSupertype());
+                            int chipId = mapSupertypeToId.get(supertypeName);
                             System.out.println("cardId is: " + cardId + "\n");
                             System.out.println(chipId);
                             viewModel.insertCardSupertype((int)cardId, chipId);
                         } else {
                             long chipId = viewModel.insertSupertypeEntityWithReturn(new SupertypeEntity(supertypeName));
                             viewModel.insertCardSupertype((int) cardId, (int) chipId);
+                        }
+                    });
+                    typeNachoField.getAllChips().forEach( chip -> {
+                        String typeName;
+                        if(chip.getData() == null){
+                            typeName = chip.getText().toString();
+                        } else  typeName= (((TypeEntity) chip.getData()).getType());
+                        if(mapTypeToId.containsKey(typeName)){
+                            int chipId = mapTypeToId.get(typeName);
+                            viewModel.insertCardType((int)cardId, chipId);
+                        } else {
+                            long chipId = viewModel.insertTypeEntityWithReturn(new TypeEntity(typeName));
+                            viewModel.insertCardType((int) cardId, (int) chipId);
                         }
                     });
                 });

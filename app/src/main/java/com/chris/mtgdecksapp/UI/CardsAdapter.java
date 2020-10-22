@@ -65,7 +65,6 @@ public class CardsAdapter extends  RecyclerView.Adapter<CardsAdapter.ViewHolder>
             });
         }
     }
-
     public interface OnCardClickListener{
             void onCardClick(CardEntity card);
     }

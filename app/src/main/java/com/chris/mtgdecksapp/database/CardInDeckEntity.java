@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "cardInDeck",
+        primaryKeys = {"cardId_FK", "deckId_FK"},
         indices = {@Index("cardId_FK"),@Index("deckId_FK")},
         foreignKeys = {@ForeignKey(entity = CardEntity.class,
                              parentColumns = "cardId", childColumns = "cardId_FK", onDelete = CASCADE),
@@ -17,23 +18,20 @@ import static androidx.room.ForeignKey.CASCADE;
         }
 )
 public class CardInDeckEntity {
-    @PrimaryKey(autoGenerate = true)
-    private int cardInDeckId;
-
     private int cardId_FK;
     private int deckId_FK;
     private int quantity;
     private boolean currentlyInDeck;
 
 
-    public CardInDeckEntity(int cardInDeckId, int cardId_FK, int deckId_FK, int quantity, boolean currentlyInDeck) {
-        this.cardInDeckId = cardInDeckId;
-        this.cardId_FK = cardId_FK;
-        this.deckId_FK = deckId_FK;
-        this.quantity = quantity;
-        this.currentlyInDeck = currentlyInDeck;
-    }
-@Ignore
+//    public CardInDeckEntity(int cardInDeckId, int cardId_FK, int deckId_FK, int quantity, boolean currentlyInDeck) {
+//        this.cardInDeckId = cardInDeckId;
+//        this.cardId_FK = cardId_FK;
+//        this.deckId_FK = deckId_FK;
+//        this.quantity = quantity;
+//        this.currentlyInDeck = currentlyInDeck;
+//    }
+
     public CardInDeckEntity(int cardId_FK, int deckId_FK, int quantity, boolean currentlyInDeck) {
         this.cardId_FK = cardId_FK;
         this.deckId_FK = deckId_FK;
@@ -43,13 +41,6 @@ public class CardInDeckEntity {
 @Ignore
     public CardInDeckEntity(){}
 
-    public int getCardInDeckId() {
-        return cardInDeckId;
-    }
-
-    public void setCardInDeckId(int cardInDeckId) {
-        this.cardInDeckId = cardInDeckId;
-    }
 
     public int getCardId_FK() {
         return cardId_FK;

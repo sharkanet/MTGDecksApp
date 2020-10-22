@@ -21,7 +21,7 @@ public class MTGAppRepository {
 //    private GameEntityDao gameEntityDao;
 //    private SupertypeEntityDao supertypeEntityDao;
 //    private TypeEntityDao typeEntityDao;
-    private static final int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = 1;
     static final ExecutorService executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 
@@ -112,6 +112,14 @@ public class MTGAppRepository {
     public LiveData<List<CardInDeck>> getCardsInDeckWithId(int id){
         return mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
     }
+    //retrieve lists of type and supertype for card id
+    public LiveData<List<CardTypeEntity>> getCardTypeForCardId(int id){
+        return mtgAppDatabase.CardTypeEntityDao().getCardTypeEntityForCardId(id);
+    }
+    public LiveData<List<CardSupertypeEntity>> getCardSupertypeForCardId(int id){
+        return mtgAppDatabase.CardSupertypeEntityDao().getCardSupertypeEntityForCardId(id);
+    }
+
 
 
     //retrieve full lists of entities
@@ -272,9 +280,9 @@ public void deleteCardEntity(CardEntity cardEntity){
 
   //delete all from database
     public void clearDB(){
-        //deleteAllCardEntity();
-       // deleteAllDeckEntity();
-        //deleteAllCardInDeckEntity();
+        deleteAllCardEntity();
+        deleteAllDeckEntity();
+        deleteAllTypeEntity();
         deleteAllSupertypeEntity();
     }
     public void deleteAllDeckEntity(){
@@ -392,12 +400,12 @@ public void deleteCardEntity(CardEntity cardEntity){
         insertCardEntity(new CardEntity(1, "placeholder 1", "{R}{R}{R}{3}","placeholder text 1", "n/a", "n/a", "n/a"));
         insertCardEntity(new CardEntity(2, "placeholder 2", "{R}{G}{B}{7}","placeholder text 2 \n more text 2", "n/a", "n/a", "n/a"));
         insertCardEntity(new CardEntity(3, "placeholder 3", "{W}{W}{W}{1}","placeholder text 3 IS VERY LONG!! \nanother \npotato", "n/a", "n/a", "n/a"));
-        insertCardInDeckEntity(new CardInDeckEntity(1, 1, 1, 1,true));
-        insertCardInDeckEntity(new CardInDeckEntity(2, 2, 1, 2,true));
-        insertCardInDeckEntity(new CardInDeckEntity(3, 2, 2, 2,true));
-        insertCardInDeckEntity(new CardInDeckEntity(4, 3, 2, 1,true));
-        insertCardInDeckEntity(new CardInDeckEntity(5, 1, 3, 1,true));
-        insertCardInDeckEntity(new CardInDeckEntity(6, 3, 3, 99,true));
+        insertCardInDeckEntity(new CardInDeckEntity(1, 1, 1,true));
+        insertCardInDeckEntity(new CardInDeckEntity(2, 1, 2,true));
+        insertCardInDeckEntity(new CardInDeckEntity(2, 2, 2,true));
+        insertCardInDeckEntity(new CardInDeckEntity(3, 2, 1,true));
+        insertCardInDeckEntity(new CardInDeckEntity(1, 3, 1,true));
+        insertCardInDeckEntity(new CardInDeckEntity(3, 3, 99,true));
         insertSupertypeEntity(new SupertypeEntity(1, "Basic"));
         insertSupertypeEntity(new SupertypeEntity(2, "Land"));
         insertSupertypeEntity(new SupertypeEntity(3,"Creature"));

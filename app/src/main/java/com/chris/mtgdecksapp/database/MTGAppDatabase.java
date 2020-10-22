@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {CardEntity.class, CardInDeckEntity.class, CardSupertypeEntity.class, CardTypeEntity.class, DeckEntity.class, GameEntity.class,
-                        SupertypeEntity.class, TypeEntity.class}, exportSchema = false, version = 5)
+                        SupertypeEntity.class, TypeEntity.class}, exportSchema = false, version = 6)
 public abstract class MTGAppDatabase extends RoomDatabase {
     public abstract CardEntityDao CardEntityDao();
     public abstract CardInDeckEntityDao CardInDeckEntityDao();

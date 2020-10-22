@@ -20,6 +20,8 @@ import com.chris.mtgdecksapp.databinding.ActivityCardsBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static com.chris.mtgdecksapp.utility.Constants.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,8 +88,15 @@ public class CardsActivity extends AppCompatActivity {
         viewModel.getAllCardEntity().observe(this, cardObserver);
         adapter.setOnCardClickListener(card -> {
             //TODO
-            Toast toast=Toast.makeText(getApplicationContext(), card + " button", Toast.LENGTH_SHORT );
-            toast.show();
+            Intent intent = new Intent(CardsActivity.this, CardEditActivity.class);
+            intent.putExtra(CARD_ID_KEY, card.getCardId());
+            intent.putExtra(CARD_NAME_KEY, card.getName());
+            intent.putExtra(CARD_MANA_KEY, card.getManaCost());
+            intent.putExtra(CARD_TEXT_KEY, card.getText());
+            intent.putExtra(CARD_POWER_KEY, card.getPower());
+            intent.putExtra(CARD_TOUGHNESS_KEY, card.getToughness());
+            intent.putExtra(CARD_LOYALTY_KEY, card.getLoyalty());
+            startActivity(intent);
         });
     }
 
