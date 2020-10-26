@@ -47,8 +47,8 @@ public class CardEditViewModel extends AndroidViewModel {
         cardTypeEntities = repository.getCardTypeForCardId(id);
     }
 
-    public void save(String name, String manaCost, String text, String power, String toughness, String loyalty){
-        CardEntity newCardEntity = new CardEntity(name, manaCost, text, power, toughness, loyalty);
+    public void save(int id, String name, String manaCost, String text, String power, String toughness, String loyalty){
+        CardEntity newCardEntity = new CardEntity(id, name, manaCost, text, power, toughness, loyalty);
         repository.updateCardEntity(newCardEntity);
     }
 
@@ -68,6 +68,7 @@ public class CardEditViewModel extends AndroidViewModel {
         return cardSupertypeEntities;
     }
 
+
     public List<CardTypeEntity> getCardTypeEntitiesList() {
         return cardTypeEntitiesList;
     }
@@ -82,6 +83,13 @@ public class CardEditViewModel extends AndroidViewModel {
 
     public void setCardSupertypeEntitiesList(List<CardSupertypeEntity> cardSupertypeEntitiesList) {
         this.cardSupertypeEntitiesList = cardSupertypeEntitiesList;
+    }
+
+    public List<CardTypeEntity> getListCardTypeForCardId(int id){
+        return repository.getListCardTypeForCardId(id);
+    }
+    public List<CardSupertypeEntity> getListCardSupertypeForCardId(int id){
+        return repository.getListCardSupertypeForCardId(id);
     }
 
     public Map<String, Integer> getMapSupertypeToId() {
@@ -113,5 +121,10 @@ public class CardEditViewModel extends AndroidViewModel {
 
     public long insertTypeEntityWithReturn(TypeEntity typeEntity){
         return repository.insertTypeEntityWithReturn(typeEntity);
+    }
+
+    public void deleteCardTypeAndSupertypes(int id){
+        repository.deleteCardTypeEntitiesForCardId(id);
+        repository.deleteCardSupertypeEntitiesForCardId(id);
     }
 }

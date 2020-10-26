@@ -1,6 +1,7 @@
 package com.chris.mtgdecksapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,6 +35,7 @@ public class CardsActivity extends AppCompatActivity {
     private List<CardEntity> cards = new ArrayList<>();
     private CardsAdapter adapter;
     private CardsViewModel viewModel;
+    private SearchView searchView;
 
 
 
@@ -49,6 +51,8 @@ public class CardsActivity extends AppCompatActivity {
         setSupportActionBar(toolbarBinding.toolbar);
         getSupportActionBar().setTitle("Cards");
 
+
+        initSearchView();
         //setup recyclerview
         initRecyclerView();
         //setup viewmodel
@@ -66,7 +70,26 @@ public class CardsActivity extends AppCompatActivity {
 
     }
 
+    private void initSearchView() {
+        //setup searchview
+        searchView = binding.cardSearchView;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter("");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+    }
+
     private void initRecyclerView() {
+        recyclerView = binding.recyclerView;
         adapter = new CardsAdapter(cards, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -82,6 +105,7 @@ public class CardsActivity extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
             } else {
                 adapter.notifyDataSetChanged();
+                adapter.updateCardsFull();
             }
         };
         viewModel = new ViewModelProvider(this).get(CardsViewModel.class);
@@ -102,6 +126,7 @@ public class CardsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
+        //Todo
         Toolbar toolbar = toolbarBinding.toolbar;
         toolbar.inflateMenu(R.menu.main_menu);
         return true;

@@ -112,12 +112,30 @@ public class MTGAppRepository {
     public LiveData<List<CardInDeck>> getCardsInDeckWithId(int id){
         return mtgAppDatabase.CardInDeckDao().getCardsInDeck(id);
     }
+    //get games for deck id
+    public LiveData<List<GameEntity>> getGamesForDeckId(int id){
+        return mtgAppDatabase.GameEntityDao().getAllGameEntityForDeck(id);
+    }
+    //get wins and losses for deck
+    public int getWinCountForDeck(int id){
+        return mtgAppDatabase.GameEntityDao().getWinCountForDeck(id);
+    }
+    public int getLoseCountForDeck(int id){
+        return mtgAppDatabase.GameEntityDao().getLoseCountForDeck(id);
+    }
+
     //retrieve lists of type and supertype for card id
     public LiveData<List<CardTypeEntity>> getCardTypeForCardId(int id){
         return mtgAppDatabase.CardTypeEntityDao().getCardTypeEntityForCardId(id);
     }
     public LiveData<List<CardSupertypeEntity>> getCardSupertypeForCardId(int id){
         return mtgAppDatabase.CardSupertypeEntityDao().getCardSupertypeEntityForCardId(id);
+    }
+    public List<CardTypeEntity> getListCardTypeForCardId(int id){
+        return mtgAppDatabase.CardTypeEntityDao().getListCardTypeEntityForCardId(id);
+    }
+    public List<CardSupertypeEntity> getListCardSupertypeForCardId(int id){
+        return mtgAppDatabase.CardSupertypeEntityDao().getListCardSupertypeEntityForCardId(id);
     }
 
 
@@ -420,6 +438,9 @@ public void deleteCardEntity(CardEntity cardEntity){
         insertTypeEntity(new TypeEntity(2, "Jace"));
         insertTypeEntity(new TypeEntity(3, "Forest"));
         insertTypeEntity(new TypeEntity(4, "Equipment"));
+        insertGameEntity(new GameEntity(1,1,"opponent", "opponent","Win"));
+        insertGameEntity(new GameEntity(2,1,"opponent", "opponent","Win"));
+        insertGameEntity(new GameEntity(3,2,"opponent", "opponent","Lose"));
 
 
         System.out.println("put fake data");

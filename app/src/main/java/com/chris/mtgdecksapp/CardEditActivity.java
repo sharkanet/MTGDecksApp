@@ -75,8 +75,6 @@ public class CardEditActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                fillNachoView();
                 String cardName = nameField.getText().toString().trim();
                 String cardMana = manaField.getText().toString().trim();
                 String cardText = textField.getText().toString().trim();
@@ -85,7 +83,7 @@ public class CardEditActivity extends AppCompatActivity {
                 String cardLoyalty = loyaltyField.getText().toString().trim();
 
                 executor.execute(() -> {
-                    viewModel.save(cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty);
+                    viewModel.save(cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty);
                     supertypeNachoField.getAllChips().forEach(chip -> {
                         String supertypeName;
                         if (chip.getData() == null) {
@@ -166,9 +164,6 @@ public class CardEditActivity extends AppCompatActivity {
         final Observer<List<CardTypeEntity>> cardTypeEntityObserver = newCardType ->{
             viewModel.getCardTypeEntitiesList().clear();
             viewModel.getCardTypeEntitiesList().addAll(newCardType);
-            viewModel.getCardTypeEntitiesList().forEach( cardTypeEntity -> {
-                System.out.println(cardTypeEntity.getTypeId_FK() + " " + cardTypeEntity.getCardId_FK());
-            });
         };
         viewModel.getCardTypeEntities().observe(this, cardTypeEntityObserver);
 
@@ -179,7 +174,31 @@ public class CardEditActivity extends AppCompatActivity {
         };
         viewModel.getCardSupertypeEntities().observe(this, cardSupertypeEntityObserver);
 
-       setFields();
+//        final Observer<List<CardTypeEntity>> cardTypeEntityObserver1 = new Observer<List<CardTypeEntity>>() {
+//            @Override
+//            public void onChanged(List<CardTypeEntity> cardTypeEntities) {
+//                cardTypeEntities.forEach( cardTypeEntity -> {
+//                    typeNachoField.append(viewModel.getMapIdToType().get(cardTypeEntity.getTypeId_FK()));
+//                    typeNachoField.chipifyAllUnterminatedTokens();
+//                });
+//
+//            }
+//        };
+//        viewModel.getCardTypeEntities().observe(this, cardTypeEntityObserver1);
+//        final Observer<List<CardSupertypeEntity>> cardSupertypeEntityObserver1 = new Observer<List<CardSupertypeEntity>>() {
+//            @Override
+//            public void onChanged(List<CardSupertypeEntity> cardTypeEntities) {
+//                cardTypeEntities.forEach( cardTypeEntity -> {
+//                    supertypeNachoField.append(viewModel.getMapIdToType().get(cardTypeEntity.getSupertypeId_FK()));
+//                    supertypeNachoField.chipifyAllUnterminatedTokens();
+//                });
+//
+//            }
+//        };
+//        viewModel.getCardSupertypeEntities().observe(this, cardSupertypeEntityObserver1);
+
+
+        setFields();
     }
 
     private void retrieveExtras() {
@@ -241,7 +260,7 @@ public class CardEditActivity extends AppCompatActivity {
         supertypeNachoField.setAdapter(supertypeAdapter);
         supertypeNachoField.addChipTerminator('\n', BEHAVIOR_CHIPIFY_ALL);
 
-        binding.textViewType.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fillNachoView();
@@ -249,18 +268,61 @@ public class CardEditActivity extends AppCompatActivity {
                 binding.textViewSupertype.setText("Card Supertypes:");
                 binding.textViewSupertype.setOnClickListener(null);
                 binding.textViewType.setOnClickListener(null);
-
+                setupAlternateFAB();
             }
-        });
-        binding.textViewSupertype.setOnClickListener(new View.OnClickListener() {
+        };
+
+        binding.textViewType.setOnClickListener(onClickListener);
+        binding.textViewSupertype.setOnClickListener(onClickListener);
+        supertypeNachoField.setOnClickListener(onClickListener);
+        typeNachoField.setOnClickListener(onClickListener);
+
+    }
+
+    private void setupAlternateFAB(){
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fillNachoView();
-                binding.textViewType.setText("Card Types:");
-                binding.textViewSupertype.setText("Card Supertypes:");
-                binding.textViewSupertype.setOnClickListener(null);
-                binding.textViewType.setOnClickListener(null);
+                viewModel.deleteCardTypeAndSupertypes(cardId);
+                String cardName = nameField.getText().toString().trim();
+                String cardMana = manaField.getText().toString().trim();
+                String cardText = textField.getText().toString().trim();
+                String cardPower = powerField.getText().toString().trim();
+                String cardToughness = toughnessField.getText().toString().trim();
+                String cardLoyalty = loyaltyField.getText().toString().trim();
+
+                executor.execute(() -> {
+                    viewModel.save(cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty);
+                    supertypeNachoField.getAllChips().forEach(chip -> {
+                        String supertypeName;
+                        if (chip.getData() == null) {
+                            supertypeName = chip.getText().toString();
+                        } else supertypeName = (((SupertypeEntity) chip.getData()).getSupertype());
+                        if (viewModel.getMapSupertypeToId().containsKey(supertypeName)) {
+                            int chipId = viewModel.getMapSupertypeToId().get(supertypeName);
+                            viewModel.insertCardSupertype((int) cardId, chipId);
+                        } else {
+                            long chipId = viewModel.insertSupertypeEntityWithReturn(new SupertypeEntity(supertypeName));
+                            viewModel.insertCardSupertype((int) cardId, (int) chipId);
+                        }
+                    });
+                    typeNachoField.getAllChips().forEach(chip -> {
+                        String typeName;
+                        if (chip.getData() == null) {
+                            typeName = chip.getText().toString();
+                        } else typeName = (((TypeEntity) chip.getData()).getType());
+                        if (viewModel.getMapTypeToId().containsKey(typeName)) {
+                            int chipId = viewModel.getMapTypeToId().get(typeName);
+                            viewModel.insertCardType((int) cardId, chipId);
+                        } else {
+                            long chipId = viewModel.insertTypeEntityWithReturn(new TypeEntity(typeName));
+                            viewModel.insertCardType((int) cardId, (int) chipId);
+                        }
+                    });
+                });
+                finish();
             }
         });
     }
+
 }

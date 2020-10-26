@@ -27,6 +27,9 @@ public interface CardTypeEntityDao {
     //select for cardId_fk
     @Query("SELECT * FROM cardType WHERE cardId_FK = :id")
     LiveData<List<CardTypeEntity>> getCardTypeEntityForCardId(int id);
+    //select for cardId_fk
+    @Query("SELECT * FROM cardType WHERE cardId_FK = :id")
+    List<CardTypeEntity> getListCardTypeEntityForCardId(int id);
 
     //select all
     @Query("SELECT * FROM cardType ORDER BY cardId_FK")

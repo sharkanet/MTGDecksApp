@@ -37,7 +37,6 @@
         style="@style/ListItemText"
         android:ellipsize="none"
         android:scrollHorizontally="false"
-        android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardManaCost" />
 </androidx.constraintlayout.widget.ConstraintLayout>

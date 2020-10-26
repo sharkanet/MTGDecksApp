@@ -13,6 +13,8 @@ public class CardInDeck {
     private int quantity;
     private boolean currentlyInDeck;
 
+
+
     public CardInDeck(int cardId, String name, String manaCost, String text, String power, String toughness, String loyalty, int quantity, boolean currentlyInDeck) {
         this.cardId = cardId;
         this.name = name;
@@ -23,6 +25,10 @@ public class CardInDeck {
         this.loyalty = loyalty;
         this.quantity = quantity;
         this.currentlyInDeck = currentlyInDeck;
+    }
+
+    public boolean isCurrentlyInDeck() {
+        return currentlyInDeck;
     }
 
     public int getCardId() {

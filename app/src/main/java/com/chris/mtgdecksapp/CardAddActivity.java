@@ -245,9 +245,5 @@ public class CardAddActivity extends AppCompatActivity {
             }
         };
         viewModel.getCardEntities().observe(this, cardObserver);
-
-
     }
-
-
 }

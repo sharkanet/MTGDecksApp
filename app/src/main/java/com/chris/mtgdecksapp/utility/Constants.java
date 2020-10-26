@@ -13,5 +13,8 @@ public class Constants {
     public static final String CARD_POWER_KEY = "card_power_key";
     public static final String CARD_TOUGHNESS_KEY = "card_toughness_key";
     public static final String CARD_LOYALTY_KEY = "card_loyalty_key";
+    public static final String CARD_QUANTITY_KEY = "card_quantity_key";
+    public static final String CARD_READY_KEY = "card_ready_key";
+    public static final String CARD_IN_DECK_KEY = "card_in_deck_key";
 
 }
