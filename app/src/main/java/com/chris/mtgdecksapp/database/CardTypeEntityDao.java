@@ -20,9 +20,16 @@ public interface CardTypeEntityDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateCardTypeEntity(CardTypeEntity cardTypeEntity);
 
-    //select by id
-    @Query("SELECT * FROM cardType WHERE cardTypeId = :id")
-    CardTypeEntity getCardTypeEntityById(int id);
+//    //select by id
+//    @Query("SELECT * FROM cardType WHERE cardTypeId = :id")
+//    CardTypeEntity getCardTypeEntityById(int id);
+
+    //select for cardId_fk
+    @Query("SELECT * FROM cardType WHERE cardId_FK = :id")
+    LiveData<List<CardTypeEntity>> getCardTypeEntityForCardId(int id);
+    //select for cardId_fk
+    @Query("SELECT * FROM cardType WHERE cardId_FK = :id")
+    List<CardTypeEntity> getListCardTypeEntityForCardId(int id);
 
     //select all
     @Query("SELECT * FROM cardType ORDER BY cardId_FK")

@@ -20,9 +20,9 @@ public interface CardInDeckEntityDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateCardInDeckEntity(CardInDeckEntity cardInDeckEntity);
 
-    //select by id
-    @Query("SELECT * FROM cardInDeck WHERE cardInDeckId = :id")
-    CardInDeckEntity getCardInDeckEntityById(int id);
+//    //select by id
+//    @Query("SELECT * FROM cardInDeck WHERE cardInDeckId = :id")
+//    CardInDeckEntity getCardInDeckEntityById(int id);
 
     //select all
     @Query("SELECT * FROM cardInDeck ORDER BY deckId_FK")

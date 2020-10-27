@@ -9,23 +9,25 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chris.mtgdecksapp.AddCardToDeckActivity;
+import com.chris.mtgdecksapp.CardEditActivity;
 import com.chris.mtgdecksapp.R;
 import com.chris.mtgdecksapp.database.CardEntity;
+import com.chris.mtgdecksapp.databinding.ActivityAddCardToDeckBinding;
 import com.chris.mtgdecksapp.databinding.CardsListItemBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardsAdapter extends  RecyclerView.Adapter<CardsAdapter.ViewHolder> implements Filterable {
+public class AddCardToDeckAdapter extends RecyclerView.Adapter<AddCardToDeckAdapter.ViewHolder> implements Filterable {
     private OnCardClickListener listener;
     private final List<CardEntity> cards;
     private final Context context;
     private final List<CardEntity> cardsFull;
 
-    public CardsAdapter(List<CardEntity> cards, Context context) {
+    public AddCardToDeckAdapter(List<CardEntity> cards, Context context){
         this.cards = cards;
         this.context = context;
         cardsFull = new ArrayList<>(cards);
@@ -40,7 +42,7 @@ public class CardsAdapter extends  RecyclerView.Adapter<CardsAdapter.ViewHolder>
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.cards_list_item, parent, false);
-        return new CardsAdapter.ViewHolder(view);
+        return new AddCardToDeckAdapter.ViewHolder(view);
     }
 
     @Override
@@ -90,6 +92,8 @@ public class CardsAdapter extends  RecyclerView.Adapter<CardsAdapter.ViewHolder>
     };
 
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView textCardName, textCardMana, textCardText;
         CardsListItemBinding binding;
@@ -108,11 +112,12 @@ public class CardsAdapter extends  RecyclerView.Adapter<CardsAdapter.ViewHolder>
         }
     }
     public interface OnCardClickListener{
-            void onCardClick(CardEntity card);
+        void onCardClick(CardEntity card);
     }
 
     public void setOnCardClickListener(OnCardClickListener listener){
-            this.listener = listener;
+        this.listener = listener;
     }
+
 
 }

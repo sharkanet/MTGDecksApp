@@ -1,12 +1,16 @@
 package com.chris.mtgdecksapp.UI;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chris.mtgdecksapp.R;
@@ -45,6 +49,14 @@ public class DeckDetailAdapter extends RecyclerView.Adapter<DeckDetailAdapter.Vi
         holder.cardName.setText(cardEntity.getName());
         holder.cardMana.setText(cardEntity.getManaCost());
         holder.cardQuantity.setText("x"+cardEntity.getQuantity());
+        if(cardEntity.isCurrentlyInDeck()){
+            holder.button.setText("In");
+            holder.button.setBackgroundColor(Color.GREEN);
+        } else {
+            holder.button.setText("Out");
+            holder.button.setBackgroundColor(Color.RED);
+        }
+
 
     }
 
@@ -57,6 +69,7 @@ public class DeckDetailAdapter extends RecyclerView.Adapter<DeckDetailAdapter.Vi
         TextView cardName;
         TextView cardMana;
         TextView cardQuantity;
+        Button button;
         DeckDetailListItemBinding binding;
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -64,17 +77,27 @@ public class DeckDetailAdapter extends RecyclerView.Adapter<DeckDetailAdapter.Vi
             cardName = binding.cardNameText;
             cardMana = binding.cardManaCost;
             cardQuantity = binding.cardQuantity;
+            button = binding.inOut;
+
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if(listener!= null && position != RecyclerView.NO_POSITION){
                     listener.onCardClick(cards.get(position));
                 }
             });
+            itemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if(listener!= null && position != RecyclerView.NO_POSITION){
+                    listener.onLongClick(cards.get(position));
+                }
+                return true;
+            });
         }
     }
 
     public interface OnCardClickListener{
         void onCardClick(CardInDeck card);
+        void onLongClick(CardInDeck card);
     }
     public void setOnCardClickListener(OnCardClickListener listener){
         this.listener = listener;

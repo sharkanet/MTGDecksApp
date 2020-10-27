@@ -24,6 +24,15 @@ public interface GameEntityDao {
     //select all
     @Query("SELECT * FROM game ORDER BY deckId_FK")
     LiveData<List<GameEntity>> getAllGameEntity();
+    //get games for deck
+    @Query("SELECT * FROM game  WHERE deckId_FK = :id")
+    LiveData<List<GameEntity>> getAllGameEntityForDeck(int id);
+    //get wins for deck
+    @Query("SELECT COUNT(*) FROM game WHERE result ='Win' AND deckId_FK = :id")
+    int getWinCountForDeck(int id);
+    //get losses for deck
+    @Query("SELECT COUNT(*) FROM game WHERE result ='Lose' AND deckId_FK = :id")
+    int getLoseCountForDeck(int id);
 
     //delete
     @Delete
@@ -36,4 +45,7 @@ public interface GameEntityDao {
     //delete all
     @Query("DELETE FROM game")
     void deleteAllGameEntity();
+
+
+
 }

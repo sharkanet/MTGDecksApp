@@ -1,6 +1,7 @@
 package com.chris.mtgdecksapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +21,8 @@ import com.chris.mtgdecksapp.databinding.ActivityCardsBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static com.chris.mtgdecksapp.utility.Constants.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class CardsActivity extends AppCompatActivity {
     private List<CardEntity> cards = new ArrayList<>();
     private CardsAdapter adapter;
     private CardsViewModel viewModel;
+    private SearchView searchView;
 
 
 
@@ -47,6 +51,8 @@ public class CardsActivity extends AppCompatActivity {
         setSupportActionBar(toolbarBinding.toolbar);
         getSupportActionBar().setTitle("Cards");
 
+
+        initSearchView();
         //setup recyclerview
         initRecyclerView();
         //setup viewmodel
@@ -64,7 +70,26 @@ public class CardsActivity extends AppCompatActivity {
 
     }
 
+    private void initSearchView() {
+        //setup searchview
+        searchView = binding.cardSearchView;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter("");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+    }
+
     private void initRecyclerView() {
+        recyclerView = binding.recyclerView;
         adapter = new CardsAdapter(cards, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -80,19 +105,28 @@ public class CardsActivity extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
             } else {
                 adapter.notifyDataSetChanged();
+                adapter.updateCardsFull();
             }
         };
         viewModel = new ViewModelProvider(this).get(CardsViewModel.class);
         viewModel.getAllCardEntity().observe(this, cardObserver);
         adapter.setOnCardClickListener(card -> {
             //TODO
-            Toast toast=Toast.makeText(getApplicationContext(), card + " button", Toast.LENGTH_SHORT );
-            toast.show();
+            Intent intent = new Intent(CardsActivity.this, CardEditActivity.class);
+            intent.putExtra(CARD_ID_KEY, card.getCardId());
+            intent.putExtra(CARD_NAME_KEY, card.getName());
+            intent.putExtra(CARD_MANA_KEY, card.getManaCost());
+            intent.putExtra(CARD_TEXT_KEY, card.getText());
+            intent.putExtra(CARD_POWER_KEY, card.getPower());
+            intent.putExtra(CARD_TOUGHNESS_KEY, card.getToughness());
+            intent.putExtra(CARD_LOYALTY_KEY, card.getLoyalty());
+            startActivity(intent);
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
+        //Todo
         Toolbar toolbar = toolbarBinding.toolbar;
         toolbar.inflateMenu(R.menu.main_menu);
         return true;

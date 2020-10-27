@@ -14,7 +14,7 @@ import java.util.List;
 public interface CardEntityDao {
     //insert card
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertCardEntity(CardEntity cardEntity);
+    long insertCardEntity(CardEntity cardEntity);
 
     //update card
     @Update(onConflict = OnConflictStrategy.REPLACE)
@@ -26,7 +26,7 @@ public interface CardEntityDao {
 
     //get a card by name
     @Query("SELECT * FROM card WHERE name = :name")
-    CardEntity getCardEntityById(String name);
+    CardEntity getCardEntityByName(String name);
 
     //get cards with text
     @Query("SELECT * FROM card WHERE text LIKE '%' || :text || '%'")

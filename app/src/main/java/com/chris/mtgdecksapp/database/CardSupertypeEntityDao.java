@@ -25,6 +25,13 @@ public interface CardSupertypeEntityDao {
     @Query("SELECT * FROM cardSupertype ORDER BY cardId_FK")
     LiveData<List<CardSupertypeEntity>> getAllCardSupertypeEntity();
 
+    //select for cardId_fk
+    @Query("SELECT * FROM cardSupertype WHERE cardId_FK = :id")
+    LiveData<List<CardSupertypeEntity>> getCardSupertypeEntityForCardId(int id);
+    @Query("SELECT * FROM cardSupertype WHERE cardId_FK = :id")
+    List<CardSupertypeEntity> getListCardSupertypeEntityForCardId(int id);
+
+
     //delete
     @Delete
     void deleteCardSupertypeEntity(CardSupertypeEntity cardSupertypeEntity);

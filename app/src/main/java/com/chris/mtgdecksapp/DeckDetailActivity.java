@@ -9,44 +9,66 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chris.mtgdecksapp.UI.DeckDetailAdapter;
 import com.chris.mtgdecksapp.ViewModel.DeckDetailViewModel;
 import com.chris.mtgdecksapp.database.CardEntity;
+import com.chris.mtgdecksapp.database.GameEntity;
 import com.chris.mtgdecksapp.databinding.ActivityDeckDetailBinding;
+import com.chris.mtgdecksapp.databinding.DeckDetailListItemBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 import com.chris.mtgdecksapp.model.CardInDeck;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
+import static com.chris.mtgdecksapp.utility.Constants.CARD_ID_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_LOYALTY_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_MANA_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_NAME_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_POWER_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_QUANTITY_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_READY_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_TEXT_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_TOUGHNESS_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
 
 
 public class DeckDetailActivity extends AppCompatActivity {
     private ActivityDeckDetailBinding binding;
+    private DeckDetailListItemBinding listItemBinding;
     private ToolbarBinding toolbarBinding;
     private RecyclerView recyclerView;
     private DeckDetailAdapter adapter;
     private TextView winsText, losesText;
     private List<CardInDeck> cards = new ArrayList<>();
+    private List<GameEntity> games, wins, loses = new ArrayList<>();
     private DeckDetailViewModel viewModel;
-    private int deckId, wins, loses;
+    private int deckId;
     private String deckName;
+    private Executor executor = Executors.newSingleThreadExecutor();
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDeckDetailBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
         winsText = binding.winsText;
         losesText = binding.losesText;
         recyclerView = binding.recyclerView;
+        fab = binding.floatingActionButton;
 
 
         initRecyclerView();
@@ -59,14 +81,38 @@ public class DeckDetailActivity extends AppCompatActivity {
         //load wins and loses
         setTextWinsLoses();
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DeckDetailActivity.this, AddCardToDeckActivity.class);
+                intent.putExtra(DECK_ID_KEY, deckId);
+                startActivity(intent);
+            }
+        });
+
 
 
     }
 
     private void setTextWinsLoses() {
-        //TODO
-        //Set win/lose fields
-        //search games, count wins, count loses
+        final Observer<List<GameEntity>> recordsObserver = new Observer<List<GameEntity>>() {
+            @Override
+            public void onChanged(List<GameEntity> games) {
+
+                int wins = 0;
+                int loses = 0;
+                for (GameEntity gameEntity : games) {
+                    if (gameEntity.getResult().equalsIgnoreCase("Win"))
+                        wins++;
+                    else loses++;
+                }
+                winsText.setText(String.valueOf(wins));
+                losesText.setText(String.valueOf(loses));
+            }
+        };
+        viewModel.getGameRecords().observe(this, recordsObserver);
+
+
     }
 
     private void initRecyclerView() {
@@ -100,11 +146,35 @@ public class DeckDetailActivity extends AppCompatActivity {
             viewModel.loadDeck(deckId);
         }
         viewModel.getCardsInDeck().observe(this, cardObserver);
-        adapter.setOnCardClickListener(card -> {
-            //TODO
-            Toast toast=Toast.makeText(getApplicationContext(), card + " button", Toast.LENGTH_SHORT );
-            toast.show();
+        adapter.setOnCardClickListener(new DeckDetailAdapter.OnCardClickListener() {
+            @Override
+            public void onCardClick(CardInDeck card) {
+                Intent intent = new Intent(DeckDetailActivity.this, EditCardInDeckActivity.class);
+                intent.putExtra(DECK_ID_KEY, deckId);
+                intent.putExtra(CARD_ID_KEY, card.getCardId());
+                intent.putExtra(CARD_NAME_KEY, card.getName());
+                intent.putExtra(CARD_TEXT_KEY, card.getText());
+                intent.putExtra(CARD_QUANTITY_KEY, card.getQuantity());
+                intent.putExtra(CARD_READY_KEY, card.isCurrentlyInDeck());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(CardInDeck card) {
+                Intent intent = new Intent(DeckDetailActivity.this, CardEditActivity.class);
+                intent.putExtra(CARD_ID_KEY, card.getCardId());
+                intent.putExtra(CARD_NAME_KEY, card.getName());
+                intent.putExtra(CARD_MANA_KEY, card.getManaCost());
+                intent.putExtra(CARD_TEXT_KEY, card.getText());
+                intent.putExtra(CARD_POWER_KEY, card.getPower());
+                intent.putExtra(CARD_TOUGHNESS_KEY, card.getToughness());
+                intent.putExtra(CARD_LOYALTY_KEY, card.getLoyalty());
+                startActivity(intent);
+            }
+
         });
+
+
     }
 
     @Override

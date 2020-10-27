@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(
         tableName="card"
 )
@@ -21,6 +23,20 @@ public class CardEntity {
 
 @Ignore
     public CardEntity(){
+    }
+
+@Ignore
+    public CardEntity(String name, String manaCost, String text) {
+        this(name, manaCost, text, "n/a", "n/a", "/na");
+    }
+@Ignore
+    public CardEntity(String name, String manaCost, String text, String power, String toughness) {
+        this(name, manaCost, text, power, toughness, "n/a");
+    }
+
+@Ignore
+    public CardEntity(String name, String manaCost, String text, String loyalty) {
+        this(name, manaCost, text, "n/a", "n/a", loyalty);
     }
 
 @Ignore
@@ -105,5 +121,24 @@ public class CardEntity {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CardEntity that = (CardEntity) o;
+        return getCardId() == that.getCardId() &&
+                getName().equals(that.getName()) &&
+                getManaCost().equals(that.getManaCost()) &&
+                getText().equals(that.getText()) &&
+                getPower().equals(that.getPower()) &&
+                getToughness().equals(that.getToughness()) &&
+                getLoyalty().equals(that.getLoyalty());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCardId(), getName(), getManaCost(), getText(), getPower(), getToughness(), getLoyalty());
     }
 }
