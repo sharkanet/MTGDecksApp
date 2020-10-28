@@ -3,42 +3,40 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="@dimen/recyclerview_card_margin"
-    android:padding="@dimen/recyclerview_card_padding"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/recyclerview_card_padding"
     android:background="@drawable/border_list_item">
 
     <TextView
-        android:id="@+id/cardNameText"
+        android:id="@+id/opponentName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Opponent"
         android:layout_marginBottom="@dimen/recyclerview_card_text_margin"
         android:layout_marginTop="@dimen/recyclerview_card_text_margin"
         style="@style/ListItemText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
-        android:id="@+id/cardManaCost"
+        android:id="@+id/opponentDeck"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Opponent Deck"
         android:layout_marginBottom="@dimen/recyclerview_card_text_margin"
         android:layout_marginTop="@dimen/recyclerview_card_text_margin"
         style="@style/ListItemText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardNameText"
+        app:layout_constraintTop_toBottomOf="@id/opponentName"
         />
     <TextView
-        android:id="@+id/cardText"
+        android:id="@+id/result"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Result"
         android:layout_marginBottom="@dimen/recyclerview_card_text_margin"
         android:layout_marginTop="@dimen/recyclerview_card_text_margin"
         style="@style/ListItemText"
-        android:ellipsize="none"
-        android:scrollHorizontally="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardManaCost" />
+        app:layout_constraintTop_toBottomOf="@id/opponentDeck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

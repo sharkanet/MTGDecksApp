@@ -14,6 +14,8 @@ import com.chris.mtgdecksapp.database.MTGAppRepository;
 import com.chris.mtgdecksapp.databinding.ActivityMainBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 
+import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ToolbarBinding toolbarBinding;
@@ -42,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
         btnToCards = binding.button2;
         btnToCards.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CardsActivity.class);
+            startActivity(intent);
+        });
+
+        btnToPlay = binding.button3;
+        btnToPlay.setOnClickListener(v -> {
+            //deck selection
+            //todo
+            Intent intent = new Intent(MainActivity.this, SelectDeckActivity.class);
             startActivity(intent);
         });
 

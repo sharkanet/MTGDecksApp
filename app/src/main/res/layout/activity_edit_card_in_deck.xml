@@ -13,7 +13,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textViewName"
         style="@style/FieldLabelText"
@@ -23,6 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
     <TextView
         android:id="@+id/textViewNameField"
         style="@style/FieldLabelText"
@@ -33,6 +33,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/text_view_divider_side_margins"
+        android:layout_marginEnd="@dimen/text_view_divider_side_margins"
+        android:layout_marginTop="@dimen/text_view_divider_top_bottom_margins"
+        android:layout_marginBottom="@dimen/text_view_divider_top_bottom_margins"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNameField" />
+
     <TextView
         android:id="@+id/textViewText"
         style="@style/FieldLabelText"
@@ -41,7 +54,7 @@
         android:text="Card Text:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNameField" />
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
     <TextView
         android:id="@+id/textViewTextField"
@@ -51,6 +64,19 @@
         android:text="Card Text:"
         app:layout_constraintStart_toStartOf="@+id/textViewName"
         app:layout_constraintTop_toBottomOf="@+id/textViewText" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/text_view_divider_side_margins"
+        android:layout_marginEnd="@dimen/text_view_divider_side_margins"
+        android:layout_marginTop="@dimen/text_view_divider_top_bottom_margins"
+        android:layout_marginBottom="@dimen/text_view_divider_top_bottom_margins"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTextField" />
 
     <TextView
         android:id="@+id/textViewQuantity"
@@ -102,4 +128,19 @@
             android:layout_marginEnd="1dp"
             android:text="In"/>
     </RadioGroup>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+
+        android:src="@drawable/ic_save_black_36dp"
+        android:backgroundTint="@color/colorBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.974" />
 </androidx.constraintlayout.widget.ConstraintLayout>

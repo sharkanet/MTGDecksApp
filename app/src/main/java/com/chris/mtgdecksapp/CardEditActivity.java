@@ -1,10 +1,14 @@
 package com.chris.mtgdecksapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -323,6 +327,30 @@ public class CardEditActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        Toolbar toolbar = toolbarBinding.toolbar;
+        toolbar.inflateMenu(R.menu.detail_menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.delete:
+                // todo
+                // confirmation
+                viewModel.delete(cardId);
+                finish();
+                return  true;
+            case R.id.about:
+                Intent intent1 = new Intent(CardEditActivity.this, AboutActivity.class);
+                startActivity(intent1);
+                return true;
+            default:
+                return false;
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.room.Query;
 
 import com.chris.mtgdecksapp.model.CardInDeck;
 
@@ -296,6 +297,23 @@ public void deleteCardEntity(CardEntity cardEntity){
         });
     }
 
+  //delete by id
+    public void deleteDeckById(int id){
+         executor.execute(()->{
+             mtgAppDatabase.DeckEntityDao().deleteDeckEntity(id);
+         });
+    }
+    public void deleteCardInDeckById(int cardId, int deckId){
+        executor.execute(()->{
+            mtgAppDatabase.CardInDeckEntityDao().deleteCardInDeckEntityById(cardId, deckId);
+        });
+    }
+    public void deleteCardEntityById(int cardId) {
+        executor.execute(()->{
+            mtgAppDatabase.CardEntityDao().deleteCardEntityById(cardId);
+        });
+    }
+
   //delete all from database
     public void clearDB(){
         deleteAllCardEntity();
@@ -403,11 +421,7 @@ public void deleteCardEntity(CardEntity cardEntity){
         return cardsInDeck;
     }
 
-//    public Map<String, Integer> getMapCardNameToId() {        return mapCardNameToId;    }
-//
-//    public Map<String, Integer> getMapTypeToId() {        return mapTypeToId;    }
-//
-//    public Map<String, Integer> getMapSupertypeToId() {        return mapSupertypeToId;    }
+
 
     //fake data
     public void putFakeData(){
@@ -446,6 +460,7 @@ public void deleteCardEntity(CardEntity cardEntity){
         System.out.println("put fake data");
 
     }
+
 
 
 }

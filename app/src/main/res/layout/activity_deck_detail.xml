@@ -18,12 +18,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/recycler_view_side_margin"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="@dimen/recycler_view_side_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/losesText" />
+        app:layout_constraintTop_toBottomOf="@+id/drawsText" />
 
     <TextView
         android:id="@+id/winsLabel"
@@ -63,6 +65,25 @@
         android:text="losesText"
         app:layout_constraintStart_toEndOf="@+id/losesLabel"
         app:layout_constraintTop_toBottomOf="@+id/winsText" />
+
+    <TextView
+        android:id="@+id/drawsLabel"
+        style="@style/FieldLabelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Draws:"
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/losesLabel" />
+
+    <TextView
+        android:id="@+id/drawsText"
+        style="@style/FieldLabelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="148dp"
+        android:text="drawsText"
+        app:layout_constraintStart_toEndOf="@+id/drawsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/losesText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"

@@ -21,4 +21,8 @@ public class EditCardInDeckViewModel extends AndroidViewModel {
         repository.updateCardInDeckEntity(new CardInDeckEntity(cardId,deckId,quantity,inDeck));
     }
 
+    public void delete(int cardId, int deckId){
+        repository.deleteCardInDeckById(cardId,deckId);
+    }
+
 }

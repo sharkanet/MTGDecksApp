@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +51,7 @@ public class DeckDetailActivity extends AppCompatActivity {
     private ToolbarBinding toolbarBinding;
     private RecyclerView recyclerView;
     private DeckDetailAdapter adapter;
-    private TextView winsText, losesText;
+    private TextView winsText, losesText, drawsText;
     private List<CardInDeck> cards = new ArrayList<>();
     private List<GameEntity> games, wins, loses = new ArrayList<>();
     private DeckDetailViewModel viewModel;
@@ -98,16 +99,21 @@ public class DeckDetailActivity extends AppCompatActivity {
         final Observer<List<GameEntity>> recordsObserver = new Observer<List<GameEntity>>() {
             @Override
             public void onChanged(List<GameEntity> games) {
-
                 int wins = 0;
                 int loses = 0;
+                int draws = 0;
                 for (GameEntity gameEntity : games) {
                     if (gameEntity.getResult().equalsIgnoreCase("Win"))
                         wins++;
-                    else loses++;
+                    else if(gameEntity.getResult().equalsIgnoreCase("Lose"))
+                        loses++;
+                    else if(gameEntity.getResult().equalsIgnoreCase("Draw"))
+                        draws++;
                 }
                 winsText.setText(String.valueOf(wins));
                 losesText.setText(String.valueOf(loses));
+                drawsText.setText(String.valueOf(draws));
+
             }
         };
         viewModel.getGameRecords().observe(this, recordsObserver);
@@ -134,7 +140,6 @@ public class DeckDetailActivity extends AppCompatActivity {
             } else {
                 adapter.notifyDataSetChanged();
             }
-
         };
         viewModel = new ViewModelProvider(this).get(DeckDetailViewModel.class);
         Bundle extras = getIntent().getExtras();
@@ -180,12 +185,30 @@ public class DeckDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         Toolbar toolbar = toolbarBinding.toolbar;
-        toolbar.inflateMenu(R.menu.detail_menu);
+        toolbar.inflateMenu(R.menu.deck_detail_menu);
         return true;
     }
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-//    public void loadDeck(){
-//        viewModel.loadDeck(deckId);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.view_records:
+                Intent intent = new Intent(DeckDetailActivity.this, RecordsActivity.class);
+                intent.putExtra(DECK_ID_KEY, deckId);
+                startActivity(intent);
+                return true;
+            case R.id.delete:
+                viewModel.deleteDeck(deckId);
+                // todo
+                // confirmation
+                finish();
+                return  true;
+            case R.id.about:
+                Intent intent1 = new Intent(DeckDetailActivity.this, AboutActivity.class);
+                startActivity(intent1);
+                return true;
+            default:
+                return false;
+        }
+    }
 }

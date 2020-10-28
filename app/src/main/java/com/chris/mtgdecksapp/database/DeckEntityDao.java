@@ -20,7 +20,9 @@ public interface DeckEntityDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateDeckEntity(DeckEntity deckEntity);
 
-    //select by id
+    //delete by id
+    @Query("DELETE FROM deck WHERE deckId =:id")
+    void deleteDeckEntity(int id);
 
     //select all
     @Query("SELECT * FROM deck ORDER BY deckId")

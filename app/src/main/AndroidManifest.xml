@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".EditCardInDeckActivity"></activity>
+        <activity android:name=".RecordGameActivity"></activity>
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".SelectDeckActivity" />
+        <activity android:name=".RecordsActivity" />
+        <activity android:name=".PlayGameActivity" />
+        <activity android:name=".EditCardInDeckActivity" />
         <activity android:name=".AddCardToDeckActivity" />
         <activity android:name=".CardEditActivity" />
         <activity android:name=".AddCardSupertypeActivity" />
@@ -20,7 +25,7 @@
             android:name=".CardsActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".DeckDetailActivity" />
-        <activity android:name=".DeckAdd_Activity" />
+        <activity android:name=".DeckAddActivity" />
         <activity android:name=".DecksActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

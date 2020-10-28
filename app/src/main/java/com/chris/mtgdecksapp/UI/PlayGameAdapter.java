@@ -1,29 +1,30 @@
 package com.chris.mtgdecksapp.UI;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chris.mtgdecksapp.DecksActivity;
 import com.chris.mtgdecksapp.R;
-import com.chris.mtgdecksapp.database.DeckEntity;
-import com.chris.mtgdecksapp.databinding.DecksListItemBinding;
-import com.chris.mtgdecksapp.model.Deck;
+import com.chris.mtgdecksapp.databinding.DeckDetailListItemBinding;
+import com.chris.mtgdecksapp.databinding.SimpleCardsListItemBinding;
+import com.chris.mtgdecksapp.model.CardInDeck;
 
 import java.util.List;
 
-public class  DecksAdapter extends RecyclerView.Adapter<DecksAdapter.ViewHolder> {
-    private OnDeckClickListener listener;
-    private final List<DeckEntity> decks;
+public class PlayGameAdapter extends RecyclerView.Adapter<PlayGameAdapter.ViewHolder> {
+    private OnCardClickListener listener;
+    private final List<String> cards;
     private final Context context;
 
-    public DecksAdapter(List<DeckEntity> decks, Context context){
-        this.decks = decks;
+    public PlayGameAdapter (List<String> cards, Context context){
+        this.cards = cards;
         this.context = context;
     }
 
@@ -31,41 +32,42 @@ public class  DecksAdapter extends RecyclerView.Adapter<DecksAdapter.ViewHolder>
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.decks_list_item, parent, false);
-        return new DecksAdapter.ViewHolder(view);
+        View view = inflater.inflate(R.layout.simple_cards_list_item, parent, false);
+        return new PlayGameAdapter.ViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
-        final DeckEntity deck = decks.get(position);
-        holder.textDeckName.setText(deck.getName());
+        final String card = cards.get(position);
+        holder.cardName.setText(card);
     }
 
     @Override
     public int getItemCount(){
-        return decks.size();
+        return cards.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView textDeckName;
-        DecksListItemBinding binding;
+        TextView cardName;
+        SimpleCardsListItemBinding binding;
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            binding = DecksListItemBinding.bind(itemView);
-            textDeckName = binding.deckNameText;
+            binding = SimpleCardsListItemBinding.bind(itemView);
+            cardName = binding.cardNameText;
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if(listener!= null && position != RecyclerView.NO_POSITION){
-                    listener.onDeckClick(decks.get(position));
+                    listener.onCardClick(cards.get(position));
                 }
             });
         }
     }
 
-    public interface OnDeckClickListener{
-        void onDeckClick(DeckEntity deck);
+    public interface OnCardClickListener{
+        void onCardClick(String card);
     }
-    public void setOnDeckClickListener(OnDeckClickListener listener){
+    public void setOnCardClickListener(OnCardClickListener listener){
         this.listener = listener;
     }
 }

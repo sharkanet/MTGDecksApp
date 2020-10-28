@@ -127,4 +127,8 @@ public class CardEditViewModel extends AndroidViewModel {
         repository.deleteCardTypeEntitiesForCardId(id);
         repository.deleteCardSupertypeEntitiesForCardId(id);
     }
+
+    public void delete(int cardId){
+        repository.deleteCardEntityById(cardId);
+    }
 }

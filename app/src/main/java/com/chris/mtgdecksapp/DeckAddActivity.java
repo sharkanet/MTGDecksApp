@@ -1,10 +1,13 @@
 package com.chris.mtgdecksapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,7 +17,7 @@ import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class DeckAdd_Activity extends AppCompatActivity {
+public class DeckAddActivity extends AppCompatActivity {
     private ActivityDeckAddBinding binding;
     private ToolbarBinding toolbarBinding;
     private FloatingActionButton fab;
@@ -40,6 +43,7 @@ public class DeckAdd_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 //TODO
+                // check for a name
                 viewModel.save(nameField.getText().toString().trim());
                 finish();
             }
@@ -48,5 +52,24 @@ public class DeckAdd_Activity extends AppCompatActivity {
 
     private void initViewModel(){
         viewModel = new ViewModelProvider(this).get(DeckAddViewModel.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        Toolbar toolbar = toolbarBinding.toolbar;
+        toolbar.inflateMenu(R.menu.basic_menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.about:
+                Intent intent= new Intent(DeckAddActivity.this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return false;
+        }
     }
 }

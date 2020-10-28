@@ -11,14 +11,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
 import com.chris.mtgdecksapp.UI.DecksAdapter;
 import com.chris.mtgdecksapp.ViewModel.DecksViewModel;
+import com.chris.mtgdecksapp.ViewModel.SelectDeckViewModel;
 import com.chris.mtgdecksapp.database.DeckEntity;
-import com.chris.mtgdecksapp.databinding.ActivityDecksBinding;
+import com.chris.mtgdecksapp.databinding.ActivitySelectDeckBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,74 +26,49 @@ import java.util.List;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
 
-public class DecksActivity extends AppCompatActivity {
-    private ActivityDecksBinding binding;
+public class SelectDeckActivity extends AppCompatActivity {
+    private ActivitySelectDeckBinding binding;
     private ToolbarBinding toolbarBinding;
-    private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private DecksAdapter adapter;
+    private SelectDeckViewModel viewModel;
     private List<DeckEntity> decks = new ArrayList<>();
-    private DecksViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityDecksBinding.inflate(getLayoutInflater());
+        binding = ActivitySelectDeckBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //setup toolbar
         toolbarBinding = binding.toolbar;
         setSupportActionBar(toolbarBinding.toolbar);
-        getSupportActionBar().setTitle("Decks");
+        getSupportActionBar().setTitle("Select Deck For Game");
 
-        //setup recyclerview
-        initRecyclerView();
-        //setup viewmodel
-        initViewModel();
-        //setup floating action button
-        fab = binding.floatingActionButton;
-        fab.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view){
-                    Intent intent = new Intent(DecksActivity.this, DeckAddActivity.class);
-                    startActivity(intent);
-        }
-        });
-
-    }
-
-
-
-    private void initRecyclerView() {
-        //setup recyclerview
         recyclerView = binding.recyclerView;
         adapter = new DecksAdapter(decks, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-    }
 
-    private void initViewModel() {
-        //setup viewmodel
         final Observer<List<DeckEntity>> deckObserver = newDecks -> {
             decks.clear();
             decks.addAll(newDecks);
             if(adapter == null){
-                adapter = new DecksAdapter(decks, DecksActivity.this);
+                adapter = new DecksAdapter(decks, SelectDeckActivity.this);
                 recyclerView.setAdapter(adapter);
             } else {
                 adapter.notifyDataSetChanged();;
             }
         };
-        viewModel = new ViewModelProvider(this).get(DecksViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SelectDeckViewModel.class);
         viewModel.getAllDecks().observe(this, deckObserver);
-        adapter.setOnDeckClickListener(deck -> {
-                Intent intent = new Intent(DecksActivity.this, DeckDetailActivity.class);
-                intent.putExtra(DECK_ID_KEY, deck.getDeckId());
-                intent.putExtra(DECK_NAME_KEY, deck.getName());
-                startActivity(intent);
+        adapter.setOnDeckClickListener(deck ->{
+            Intent intent = new Intent(SelectDeckActivity.this, PlayGameActivity.class);
+            intent.putExtra(DECK_ID_KEY, deck.getDeckId());
+            startActivity(intent);
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         Toolbar toolbar = toolbarBinding.toolbar;
@@ -104,14 +79,8 @@ public class DecksActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            //todo
-            case R.id.about:
-                Intent intent= new Intent(DecksActivity.this, AboutActivity.class);
-                startActivity(intent);
-                return true;
             default:
-                 return false;
+                return false;
+        }
     }
-    }
-
 }
