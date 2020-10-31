@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:hint="Card Quantity"
             android:id="@+id/editTextQuantity"
-            android:inputType="text"
+            android:inputType="number"
             android:maxLines="1"
             android:scrollHorizontally="false"
             android:textSize="@dimen/inputFieldTextSize" />

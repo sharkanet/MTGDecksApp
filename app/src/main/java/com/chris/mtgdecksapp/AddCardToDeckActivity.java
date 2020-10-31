@@ -40,6 +40,7 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     private AddCardToDeckViewModel viewModel;
     private SearchView searchView;
     private List<CardEntity> cards = new ArrayList<>();
+    private List<CardInDeckEntity> cardInDeckEntities = new ArrayList<>();
     private int deckId, cardId, quantity;
     private boolean inDeck = true;
     private String cardName;
@@ -93,6 +94,11 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     }
 
     private void initViewModel() {
+        final Observer<List<CardInDeckEntity>> cardInDeckObserver = newCardInDecks ->{
+            cardInDeckEntities.clear();
+            cardInDeckEntities.addAll(newCardInDecks);
+        };
+
         final Observer<List<CardEntity>> cardObserver = newCards ->{
             cards.clear();
             cards.addAll(newCards);
@@ -104,6 +110,7 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
                 adapter.updateCardsFull();
             }
         };
+
         viewModel = new ViewModelProvider(this).get(AddCardToDeckViewModel.class);
         Bundle extras = getIntent().getExtras();
         if(extras == null){
@@ -113,21 +120,25 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
             viewModel.loadDeck(deckId);
         }
         viewModel.getAllCardEntity().observe(this, cardObserver);
+        viewModel.getAllCardInDeckEntity().observe(this, cardInDeckObserver);
         adapter.setOnCardClickListener(card -> {
-            Toast toast=Toast.makeText(getApplicationContext(), card + " button", Toast.LENGTH_SHORT );
-            toast.show();
-            //TODO
             this.cardId = card.getCardId();
             this.cardName = card.getName();
+            this.quantity = 0;
+            for(CardInDeckEntity cardInDeckEntity: cardInDeckEntities){
+                if(cardInDeckEntity.getDeckId_FK()==deckId && cardInDeckEntity.getCardId_FK() == cardId){
+                    quantity = cardInDeckEntity.getQuantity();
+                }
+            }
             // add the card to the deck
-            // pop up for quantity
+            // pop up for quantity to add
             showQuantityDialog();
        });
     }
 
     @Override
     public void quantityPass(int quantity) {
-        this.quantity=quantity;
+        this.quantity=this.quantity+quantity;
     }
 
     public void showQuantityDialog(){
@@ -136,12 +147,11 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     }
 
     public void onDialogPositiveClick(DialogFragment dialogFragment){
-        /// TODO
+        // TODO sanity check?
+        // Todo validate number for edh?
+
         //save
         viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
-        Toast toast=Toast.makeText(getApplicationContext(), "Added "+quantity+" "+ cardName+" to deck.", Toast.LENGTH_SHORT );
-        toast.show();
-
     }
     public void onDialogNegativeClick(DialogFragment dialogFragment){
         //do nothing

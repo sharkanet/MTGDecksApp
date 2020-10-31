@@ -15,6 +15,7 @@ import java.util.List;
 public class AddCardToDeckViewModel extends AndroidViewModel {
     private MTGAppRepository repository;
     private LiveData<List<CardEntity>> allCardEntity;
+    private LiveData<List<CardInDeckEntity>> allCardInDeckEntity;
     private int deckId;
 
 
@@ -22,6 +23,7 @@ public class AddCardToDeckViewModel extends AndroidViewModel {
         super(application);
         repository = MTGAppRepository.getInstance(application.getApplicationContext());
         allCardEntity = repository.getAllCardEntity();
+        allCardInDeckEntity = repository.getAllCardInDeckEntity();
     }
 
     public void loadDeck(int id){
@@ -34,5 +36,9 @@ public class AddCardToDeckViewModel extends AndroidViewModel {
 
     public LiveData<List<CardEntity>> getAllCardEntity() {
         return allCardEntity;
+    }
+
+    public LiveData<List<CardInDeckEntity>> getAllCardInDeckEntity() {
+        return allCardInDeckEntity;
     }
 }

@@ -63,6 +63,9 @@ public class RecordGameActivity extends AppCompatActivity {
                 else{
                     // todo error message
                 }
+                Intent intent = new Intent(RecordGameActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }

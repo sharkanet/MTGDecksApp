@@ -316,10 +316,10 @@ public void deleteCardEntity(CardEntity cardEntity){
 
   //delete all from database
     public void clearDB(){
-        deleteAllCardEntity();
-        deleteAllDeckEntity();
         deleteAllTypeEntity();
         deleteAllSupertypeEntity();
+        deleteAllCardEntity();
+        deleteAllDeckEntity();
     }
     public void deleteAllDeckEntity(){
         executor.execute(()->{

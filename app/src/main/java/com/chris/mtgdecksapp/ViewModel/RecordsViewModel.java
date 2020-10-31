@@ -29,4 +29,8 @@ public class RecordsViewModel extends AndroidViewModel {
     public LiveData<List<GameEntity>> getGames() {
         return games;
     }
+
+    public void delete(GameEntity gameEntity){
+        repository.deleteGameEntity(gameEntity);
+    }
 }

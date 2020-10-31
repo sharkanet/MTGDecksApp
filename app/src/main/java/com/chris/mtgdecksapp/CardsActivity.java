@@ -121,6 +121,7 @@ public class CardsActivity extends AppCompatActivity {
             intent.putExtra(CARD_POWER_KEY, card.getPower());
             intent.putExtra(CARD_TOUGHNESS_KEY, card.getToughness());
             intent.putExtra(CARD_LOYALTY_KEY, card.getLoyalty());
+            intent.putExtra(CARD_IS_BASIC, card.isBasic());
             startActivity(intent);
         });
     }

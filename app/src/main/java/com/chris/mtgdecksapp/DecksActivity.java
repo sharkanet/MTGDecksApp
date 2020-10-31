@@ -104,7 +104,6 @@ public class DecksActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            //todo
             case R.id.about:
                 Intent intent= new Intent(DecksActivity.this, AboutActivity.class);
                 startActivity(intent);

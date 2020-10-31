@@ -16,5 +16,6 @@ public class Constants {
     public static final String CARD_QUANTITY_KEY = "card_quantity_key";
     public static final String CARD_READY_KEY = "card_ready_key";
     public static final String CARD_IN_DECK_KEY = "card_in_deck_key";
+    public static final String CARD_IS_BASIC ="card_is_basic";
 
 }

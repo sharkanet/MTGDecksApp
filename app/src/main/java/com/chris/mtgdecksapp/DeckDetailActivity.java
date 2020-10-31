@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Lifecycle;
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -68,6 +70,7 @@ public class DeckDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         winsText = binding.winsText;
         losesText = binding.losesText;
+        drawsText = binding.drawsText;
         recyclerView = binding.recyclerView;
         fab = binding.floatingActionButton;
 
@@ -198,10 +201,23 @@ public class DeckDetailActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.delete:
-                viewModel.deleteDeck(deckId);
-                // todo
-                // confirmation
-                finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(DeckDetailActivity.this);
+                builder.setMessage("Delete Deck?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                viewModel.deleteDeck(deckId);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //cancel
+                                //do nothing
+                            }
+                        });
+                builder.create().show();
                 return  true;
             case R.id.about:
                 Intent intent1 = new Intent(DeckDetailActivity.this, AboutActivity.class);

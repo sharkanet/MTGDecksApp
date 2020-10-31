@@ -1,9 +1,11 @@
 package com.chris.mtgdecksapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -53,15 +55,55 @@ public class EditCardInDeckActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(buttonIn.isChecked()) {
-                    viewModel.save(cardId, deckId, Integer.valueOf(cardQuantityField.getText().toString().trim()), true);
-                    finish();
-                } else if(buttonOut.isChecked()){
-                    viewModel.save(cardId, deckId, Integer.valueOf(cardQuantityField.getText().toString().trim()), false);
-                    finish();
-                } else {
-                  //  todo
-                  //  throw Exception
+                //todo
+                // todo check for edh?
+
+                // check quantity field
+                try{
+                    int quantity = Integer.valueOf(cardQuantityField.getText().toString().trim());
+                    if(quantity == 0){
+                       confirmDelete();
+                    }else if(buttonIn.isChecked()) {
+                        viewModel.save(cardId, deckId, quantity, true);
+                        finish();
+                    } else if(buttonOut.isChecked()){
+                        viewModel.save(cardId, deckId, quantity, false);
+                        finish();
+                    } else {
+                        //  todo
+                        throw new Exception("Unknown Error");
+                    }
+                } catch (NumberFormatException e){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
+                    builder.setMessage("Error in quantity field.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            });
+                    builder.create().show();
+
+                } catch (NullPointerException e){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
+                    builder.setMessage("Error in quantity field.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            });
+                    builder.create().show();
+                } catch (Exception e){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
+                    builder.setMessage("Error!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            });
+                    builder.create().show();
                 }
             }
         });
@@ -106,11 +148,8 @@ public class EditCardInDeckActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.delete:
-                //todo
-                //confirmation
-                viewModel.delete(cardId, deckId);
-                finish();
-                return true;
+                confirmDelete();
+                return  true;
             case R.id.about:
                 Intent intent= new Intent(EditCardInDeckActivity.this, AboutActivity.class);
                 startActivity(intent);
@@ -118,5 +157,23 @@ public class EditCardInDeckActivity extends AppCompatActivity {
             default:
                 return false;
         }
+    }
+
+    private void confirmDelete(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
+        builder.setMessage("Remove card from deck?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        viewModel.delete(cardId,deckId);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        builder.create().show();
     }
 }
