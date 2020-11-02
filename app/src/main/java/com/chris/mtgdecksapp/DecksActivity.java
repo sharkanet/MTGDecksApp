@@ -25,6 +25,7 @@ import java.util.List;
 
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.IS_COMMANDER_KEY;
 
 public class DecksActivity extends AppCompatActivity {
     private ActivityDecksBinding binding;
@@ -91,6 +92,7 @@ public class DecksActivity extends AppCompatActivity {
                 Intent intent = new Intent(DecksActivity.this, DeckDetailActivity.class);
                 intent.putExtra(DECK_ID_KEY, deck.getDeckId());
                 intent.putExtra(DECK_NAME_KEY, deck.getName());
+                intent.putExtra(IS_COMMANDER_KEY, deck.isCommanderDeck());
                 startActivity(intent);
         });
     }

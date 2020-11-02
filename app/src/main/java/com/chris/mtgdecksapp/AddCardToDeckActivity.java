@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.IS_COMMANDER_KEY;
 
 public class AddCardToDeckActivity extends AppCompatActivity implements CardQuantityDialogFragment.CardQuantityDialogListener, CardQuantityDialogFragment.QuantityPass {
     private ActivityAddCardToDeckBinding binding;
@@ -42,7 +45,7 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     private List<CardEntity> cards = new ArrayList<>();
     private List<CardInDeckEntity> cardInDeckEntities = new ArrayList<>();
     private int deckId, cardId, quantity;
-    private boolean inDeck = true;
+    private boolean inDeck = true, isCommanderDeck, selectedCardBasic;
     private String cardName;
 
     @Override
@@ -117,6 +120,7 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
             System.out.println("something went wrong - should never be called - DeckDetailActivity.InitViewModel()");
         } else {
             deckId = extras.getInt(DECK_ID_KEY);
+            isCommanderDeck = extras.getBoolean(IS_COMMANDER_KEY);
             viewModel.loadDeck(deckId);
         }
         viewModel.getAllCardEntity().observe(this, cardObserver);
@@ -125,6 +129,7 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
             this.cardId = card.getCardId();
             this.cardName = card.getName();
             this.quantity = 0;
+            this.selectedCardBasic = card.isBasic();
             for(CardInDeckEntity cardInDeckEntity: cardInDeckEntities){
                 if(cardInDeckEntity.getDeckId_FK()==deckId && cardInDeckEntity.getCardId_FK() == cardId){
                     quantity = cardInDeckEntity.getQuantity();
@@ -148,10 +153,21 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
 
     public void onDialogPositiveClick(DialogFragment dialogFragment){
         // TODO sanity check?
-        // Todo validate number for edh?
+        // validate number for edh
+        if(isCommanderDeck && !selectedCardBasic && quantity > 1){
+            //error
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddCardToDeckActivity.this);
+            builder.setMessage("Commander deck can only have one of each nonbasic card.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                    });
 
+            builder.create().show();
+        }else
         //save
-        viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
+            viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
     }
     public void onDialogNegativeClick(DialogFragment dialogFragment){
         //do nothing

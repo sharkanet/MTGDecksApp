@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import static com.chris.mtgdecksapp.utility.Constants.CARD_ID_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.CARD_IS_BASIC;
 import static com.chris.mtgdecksapp.utility.Constants.CARD_LOYALTY_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.CARD_MANA_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.CARD_NAME_KEY;
@@ -45,6 +47,7 @@ import static com.chris.mtgdecksapp.utility.Constants.CARD_TEXT_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.CARD_TOUGHNESS_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.IS_COMMANDER_KEY;
 
 
 public class DeckDetailActivity extends AppCompatActivity {
@@ -53,14 +56,16 @@ public class DeckDetailActivity extends AppCompatActivity {
     private ToolbarBinding toolbarBinding;
     private RecyclerView recyclerView;
     private DeckDetailAdapter adapter;
-    private TextView winsText, losesText, drawsText;
+    private TextView winsText, losesText, drawsText, cardsCount;
     private List<CardInDeck> cards = new ArrayList<>();
-    private List<GameEntity> games, wins, loses = new ArrayList<>();
+ //   private List<GameEntity> games, wins, loses = new ArrayList<>();
     private DeckDetailViewModel viewModel;
     private int deckId;
     private String deckName;
     private Executor executor = Executors.newSingleThreadExecutor();
     private FloatingActionButton fab;
+    private boolean isCommanderDeck;
+    private CheckBox checkBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,8 @@ public class DeckDetailActivity extends AppCompatActivity {
         winsText = binding.winsText;
         losesText = binding.losesText;
         drawsText = binding.drawsText;
+        cardsCount = binding.cardCountField;
+        checkBox = binding.checkBox;
         recyclerView = binding.recyclerView;
         fab = binding.floatingActionButton;
 
@@ -90,6 +97,7 @@ public class DeckDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DeckDetailActivity.this, AddCardToDeckActivity.class);
                 intent.putExtra(DECK_ID_KEY, deckId);
+                intent.putExtra(IS_COMMANDER_KEY, isCommanderDeck);
                 startActivity(intent);
             }
         });
@@ -143,6 +151,12 @@ public class DeckDetailActivity extends AppCompatActivity {
             } else {
                 adapter.notifyDataSetChanged();
             }
+            int cardCount = 0;
+            for(CardInDeck cardInDeck: cards){
+                cardCount += cardInDeck.getQuantity();
+            }
+            cardsCount.setText(String.valueOf(cardCount));
+
         };
         viewModel = new ViewModelProvider(this).get(DeckDetailViewModel.class);
         Bundle extras = getIntent().getExtras();
@@ -151,6 +165,9 @@ public class DeckDetailActivity extends AppCompatActivity {
         } else {
             deckId = extras.getInt(DECK_ID_KEY);
             deckName = extras.getString(DECK_NAME_KEY);
+            isCommanderDeck = extras.getBoolean(IS_COMMANDER_KEY);
+            checkBox.setChecked(isCommanderDeck);
+            checkBox.setClickable(false);
             viewModel.loadDeck(deckId);
         }
         viewModel.getCardsInDeck().observe(this, cardObserver);
@@ -164,6 +181,8 @@ public class DeckDetailActivity extends AppCompatActivity {
                 intent.putExtra(CARD_TEXT_KEY, card.getText());
                 intent.putExtra(CARD_QUANTITY_KEY, card.getQuantity());
                 intent.putExtra(CARD_READY_KEY, card.isCurrentlyInDeck());
+                intent.putExtra(IS_COMMANDER_KEY, isCommanderDeck);
+                intent.putExtra(CARD_IS_BASIC, card.isBasic());
                 startActivity(intent);
             }
 
@@ -195,6 +214,13 @@ public class DeckDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
+            case R.id.edit_deck:
+                Intent intent2 = new Intent(DeckDetailActivity.this, DeckEditActivity.class);
+                intent2.putExtra(DECK_ID_KEY, deckId);
+                intent2.putExtra(DECK_NAME_KEY, deckName);
+                intent2.putExtra(IS_COMMANDER_KEY, isCommanderDeck);
+                startActivity(intent2);
+                return true;
             case R.id.view_records:
                 Intent intent = new Intent(DeckDetailActivity.this, RecordsActivity.class);
                 intent.putExtra(DECK_ID_KEY, deckId);

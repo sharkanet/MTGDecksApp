@@ -26,7 +26,7 @@ import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.*;
 
 public class RecordsActivity extends AppCompatActivity {
     private ActivityRecordsBinding binding;
@@ -76,26 +76,35 @@ public class RecordsActivity extends AppCompatActivity {
         deckId = extras.getInt(DECK_ID_KEY);
         viewModel.loadGames(deckId);
         viewModel.getGames().observe(this, gamesObserver);
-        adapter.setOnItemClickListener(deck -> {
-            //TODO
-            //what is this supposed to even do
-            //delete a record i guess?
-            AlertDialog.Builder builder = new AlertDialog.Builder(RecordsActivity.this);
-            builder.setMessage("Delete Record?")
-                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            viewModel.delete(deck);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-            builder.create().show();
+        adapter.setOnItemClickListener(new GamesAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(GameEntity game) {
+                Intent intent = new Intent(RecordsActivity.this, EditGameActivity.class);
+                intent.putExtra(GAME_ID_KEY, game.getGameId());
+                intent.putExtra(DECK_ID_KEY, game.getDeckId_FK());
+                intent.putExtra(OPPONENT_NAME_KEY, game.getOpponent());
+                intent.putExtra(OPPONENT_DECK_KEY, game.getOpponentDeckName());
+                intent.putExtra(RESULT_KEY, game.getResult());
+                startActivity(intent);
+            }
 
-
+            @Override
+            public void onLongClick(GameEntity game) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecordsActivity.this);
+                builder.setMessage("Delete Record?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                viewModel.delete(game);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                builder.create().show();
+            }
         });
     }
 

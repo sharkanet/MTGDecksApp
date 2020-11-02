@@ -12,6 +12,7 @@ public class CardInDeck {
     private String loyalty;
     private int quantity;
     private boolean currentlyInDeck;
+    private boolean isBasic;
 
 
 
@@ -93,6 +94,18 @@ public class CardInDeck {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setCurrentlyInDeck(boolean currentlyInDeck) {
+        this.currentlyInDeck = currentlyInDeck;
+    }
+
+    public boolean isBasic() {
+        return isBasic;
+    }
+
+    public void setBasic(boolean basic) {
+        isBasic = basic;
     }
 
     @NonNull

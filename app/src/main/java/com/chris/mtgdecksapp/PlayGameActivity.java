@@ -86,7 +86,6 @@ public class PlayGameActivity extends AppCompatActivity {
     private void initRecyclerView() {
         recyclerView1 = binding.recyclerView;
         recyclerView2 = binding.recyclerView2;
-// todo
         // recycler view sizes
         if(adapter1 == null){
             adapter1 = new PlayGameAdapter(viewModel.cardsUnseen, this);

@@ -313,6 +313,11 @@ public void deleteCardEntity(CardEntity cardEntity){
             mtgAppDatabase.CardEntityDao().deleteCardEntityById(cardId);
         });
     }
+    public void deleteGameEntityById(int gameId) {
+        executor.execute(()->{
+            mtgAppDatabase.GameEntityDao().deleteGameEntityById(gameId);
+        });
+    }
 
   //delete all from database
     public void clearDB(){
@@ -426,9 +431,10 @@ public void deleteCardEntity(CardEntity cardEntity){
     //fake data
     public void putFakeData(){
        // clearDB();
-        insertDeckEntity(new DeckEntity(1,"placeholder 1"));
-        insertDeckEntity(new DeckEntity(2,"placeholder 2"));
-        insertDeckEntity(new DeckEntity(3,"placeholder 3"));
+        insertDeckEntity(new DeckEntity(1,"placeholder 1", false));
+        insertDeckEntity(new DeckEntity(2,"placeholder 2", false));
+        insertDeckEntity(new DeckEntity(3,"placeholder 3", false));
+        insertDeckEntity(new DeckEntity(4, "commander deck", true));
         insertCardEntity(new CardEntity(1, "placeholder 1", "{R}{R}{R}{3}","placeholder text 1", "n/a", "n/a", "n/a"));
         insertCardEntity(new CardEntity(2, "placeholder 2", "{R}{G}{B}{7}","placeholder text 2 \n more text 2", "n/a", "n/a", "n/a"));
         insertCardEntity(new CardEntity(3, "placeholder 3", "{W}{W}{W}{1}","placeholder text 3 IS VERY LONG!! \nanother \npotato", "n/a", "n/a", "n/a"));

@@ -17,5 +17,10 @@ public class Constants {
     public static final String CARD_READY_KEY = "card_ready_key";
     public static final String CARD_IN_DECK_KEY = "card_in_deck_key";
     public static final String CARD_IS_BASIC ="card_is_basic";
+    public static final String GAME_ID_KEY ="game_id_key";
+    public static final String OPPONENT_NAME_KEY = "opponent_name_key";
+    public static final String OPPONENT_DECK_KEY = "opponent_deck_key";
+    public static final String RESULT_KEY = "result_key";
+    public static final String IS_COMMANDER_KEY = "is_commander_key";
 
 }

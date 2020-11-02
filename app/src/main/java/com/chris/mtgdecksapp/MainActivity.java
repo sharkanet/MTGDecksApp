@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
         btnToPlay = binding.button3;
         btnToPlay.setOnClickListener(v -> {
-            //todo
             Intent intent = new Intent(MainActivity.this, SelectDeckActivity.class);
             startActivity(intent);
         });

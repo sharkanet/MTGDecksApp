@@ -112,7 +112,6 @@ public class CardsActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(CardsViewModel.class);
         viewModel.getAllCardEntity().observe(this, cardObserver);
         adapter.setOnCardClickListener(card -> {
-            //TODO
             Intent intent = new Intent(CardsActivity.this, CardEditActivity.class);
             intent.putExtra(CARD_ID_KEY, card.getCardId());
             intent.putExtra(CARD_NAME_KEY, card.getName());

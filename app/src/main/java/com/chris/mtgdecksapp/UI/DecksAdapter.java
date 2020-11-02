@@ -39,6 +39,10 @@ public class  DecksAdapter extends RecyclerView.Adapter<DecksAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
         final DeckEntity deck = decks.get(position);
         holder.textDeckName.setText(deck.getName());
+        if(deck.isCommanderDeck()){
+            holder.cmdText.setVisibility(View.VISIBLE);
+        } else
+            holder.cmdText.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -47,12 +51,13 @@ public class  DecksAdapter extends RecyclerView.Adapter<DecksAdapter.ViewHolder>
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView textDeckName;
+        TextView textDeckName, cmdText;
         DecksListItemBinding binding;
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             binding = DecksListItemBinding.bind(itemView);
             textDeckName = binding.deckNameText;
+            cmdText = binding.cmdText;
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if(listener!= null && position != RecyclerView.NO_POSITION){

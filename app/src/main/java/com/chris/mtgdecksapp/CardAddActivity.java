@@ -144,7 +144,7 @@ public class CardAddActivity extends AppCompatActivity {
 //                viewModel.loadCard(cardName);
 //                int cardId = viewModel.getCardEntity().getValue().getCardId();
 //                int cardId = mapCardToId.get(cardName);
-/* WHAT AM I DOING???? //TODO
+/* WHAT AM I DOING????
                 viewModel.getCardEntity().observe(CardAddActivity.this, cardEntity -> {
                     if(cardEntity!=null){
                         cardId = cardEntity.getCardId();            }

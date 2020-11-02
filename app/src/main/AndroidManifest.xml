@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".RecordGameActivity"></activity>
+        <activity android:name=".DeckEditActivity"></activity>
+        <activity android:name=".EditGameActivity" />
+        <activity android:name=".RecordGameActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".SelectDeckActivity" />
         <activity android:name=".RecordsActivity" />

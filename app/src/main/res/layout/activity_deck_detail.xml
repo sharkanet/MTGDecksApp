@@ -24,8 +24,10 @@
         android:layout_marginEnd="@dimen/recycler_view_side_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drawsText" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/winsLabel"
@@ -33,19 +35,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Wins:"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
         android:id="@+id/winsText"
-        style="@style/FieldLabelText"
+        style="@style/FieldLabelTextSmallMargins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="24dp"
         android:text="winsText"
-        app:layout_constraintStart_toEndOf="@+id/losesLabel"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintStart_toStartOf="@+id/winsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/losesLabel" />
 
     <TextView
         android:id="@+id/losesLabel"
@@ -53,18 +53,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Loses:"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toBottomOf="@+id/winsLabel" />
+        app:layout_constraintEnd_toStartOf="@+id/drawsLabel"
+        app:layout_constraintStart_toEndOf="@+id/winsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
         android:id="@+id/losesText"
-        style="@style/FieldLabelText"
+        style="@style/FieldLabelTextSmallMargins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
         android:text="losesText"
-        app:layout_constraintStart_toEndOf="@+id/losesLabel"
-        app:layout_constraintTop_toBottomOf="@+id/winsText" />
+        app:layout_constraintStart_toStartOf="@+id/losesLabel"
+        app:layout_constraintTop_toBottomOf="@+id/losesLabel" />
 
     <TextView
         android:id="@+id/drawsLabel"
@@ -72,18 +72,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Draws:"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toBottomOf="@+id/losesLabel" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
         android:id="@+id/drawsText"
+        style="@style/FieldLabelTextSmallMargins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="drawsText"
+        app:layout_constraintStart_toStartOf="@+id/drawsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/drawsLabel" />
+
+    <TextView
+        android:id="@+id/cardCountLabel"
         style="@style/FieldLabelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:text="drawsText"
-        app:layout_constraintStart_toEndOf="@+id/drawsLabel"
-        app:layout_constraintTop_toBottomOf="@+id/losesText" />
+        android:text="Cards:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/winsText" />
+
+    <TextView
+        android:id="@+id/cardCountField"
+        style="@style/FieldLabelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cards"
+        app:layout_constraintStart_toEndOf="@id/cardCountLabel"
+        app:layout_constraintTop_toBottomOf="@+id/winsText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -99,5 +116,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.974" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Commander Deck"
+        style="@style/FieldLabelText"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/drawsText"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

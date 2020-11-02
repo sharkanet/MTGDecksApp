@@ -18,8 +18,8 @@ public class DeckAddViewModel extends AndroidViewModel {
         repository = MTGAppRepository.getInstance(application.getApplicationContext());
     }
 
-    public void save(String name){
-        DeckEntity newDeckEntity = new DeckEntity(name);
+    public void save(String name, boolean isCommanderDeck){
+        DeckEntity newDeckEntity = new DeckEntity(name, isCommanderDeck);
         repository.insertDeckEntity(newDeckEntity);
     }
 

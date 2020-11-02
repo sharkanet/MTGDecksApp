@@ -63,11 +63,19 @@ public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.ViewHolder> 
                     listener.onItemClick(games.get(position));
                 }
             });
+            itemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if(listener!= null && position != RecyclerView.NO_POSITION){
+                    listener.onLongClick(games.get(position));
+                }
+                return true;
+            });
         }
     }
 
     public interface OnItemClickListener{
-        void onItemClick(GameEntity deck);
+        void onItemClick(GameEntity game);
+        void onLongClick(GameEntity game);
     }
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;

@@ -1,8 +1,10 @@
 package com.chris.mtgdecksapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -49,23 +51,34 @@ public class RecordGameActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String opponent="", opponenetDeck="";
+                String opponent="", opponentDeck="";
                 if(opponentField != null)
                     opponent = opponentField.getText().toString().trim();
                 if(opponentDeckField != null)
-                    opponenetDeck = opponentDeckField.getText().toString().trim();
-                if(radioButtonWin.isChecked())
-                    repository.insertGameEntity(new GameEntity(deckId,opponent,opponenetDeck,"Win"));
-                else if(radioButtonLose.isChecked())
-                    repository.insertGameEntity(new GameEntity(deckId,opponent,opponenetDeck,"Lose"));
-                else if(radioButtonDraw.isChecked())
-                    repository.insertGameEntity(new GameEntity(deckId,opponent,opponenetDeck,"Draw"));
+                    opponentDeck = opponentDeckField.getText().toString().trim();
+                if(radioButtonWin.isChecked()) {
+                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Win"));
+                    returnToMain();
+                }
+                else if(radioButtonLose.isChecked()) {
+                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Lose"));
+                    returnToMain();
+                }
+                else if(radioButtonDraw.isChecked()) {
+                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Draw"));
+                    returnToMain();
+                }
                 else{
                     // todo error message
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RecordGameActivity.this);
+                    builder.setMessage("Select a result.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    builder.create().show();
                 }
-                Intent intent = new Intent(RecordGameActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
             }
         });
     }
@@ -87,5 +100,10 @@ public class RecordGameActivity extends AppCompatActivity {
             default:
                 return false;
         }
+    }
+    private void returnToMain(){
+        Intent intent = new Intent(RecordGameActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
