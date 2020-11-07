@@ -46,6 +46,6 @@ public interface GameEntityDao {
     @Query("DELETE FROM game")
     void deleteAllGameEntity();
 
-
-
+    @Query("DELETE FROM game WHERE gameId =:gameId")
+    void deleteGameEntityById(int gameId);
 }

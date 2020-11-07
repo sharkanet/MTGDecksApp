@@ -11,15 +11,20 @@ public class DeckEntity {
     @PrimaryKey(autoGenerate = true)
     private int deckId;
     private String name;
+    private boolean isCommanderDeck;
 
-    public DeckEntity(int deckId, String name) {
+    public DeckEntity(int deckId, String name, boolean isCommanderDeck) {
         this.deckId = deckId;
         this.name = name;
+        this.isCommanderDeck = isCommanderDeck;
     }
+
 @Ignore
-    public DeckEntity(String name) {
-         this.name = name;
+    public DeckEntity(String name, boolean isCommanderDeck) {
+        this.name = name;
+        this.isCommanderDeck = isCommanderDeck;
     }
+
 @Ignore
     public DeckEntity(){}
 
@@ -37,6 +42,14 @@ public class DeckEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isCommanderDeck() {
+        return isCommanderDeck;
+    }
+
+    public void setCommanderDeck(boolean commanderDeck) {
+        isCommanderDeck = commanderDeck;
     }
 
     @NonNull

@@ -6,14 +6,15 @@
     android:layout_height="wrap_content"
     tools:context=".CardQuantityDialogFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/enter_card_quantity"
         android:id="@+id/dialogText"
         style="@style/DialogText"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginTop="@dimen/recyclerview_card_margin"
+        android:layout_marginBottom="@dimen/recyclerview_card_margin"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

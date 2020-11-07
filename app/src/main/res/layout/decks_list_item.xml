@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_marginBottom="@dimen/recyclerview_card_margin"
-    android:layout_height="wrap_content">
+    android:padding="@dimen/recyclerview_card_padding"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_list_item">
 
     <TextView
         android:id="@+id/deckNameText"
@@ -16,6 +18,16 @@
         android:layout_marginTop="@dimen/recyclerview_card_text_margin"
         style="@style/ListItemText"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/cmdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground"
+        android:text="CMD"
+        android:padding="@dimen/recyclerview_card_padding_small"
+        style="@style/ListItemText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

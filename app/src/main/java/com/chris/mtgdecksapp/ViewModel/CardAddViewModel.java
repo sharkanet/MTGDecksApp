@@ -49,6 +49,11 @@ public class CardAddViewModel extends AndroidViewModel {
         CardEntity newCardEntity = new CardEntity(name, manaCost, text, power, toughness, loyalty);
         return repository.insertCardEntityWithReturn(newCardEntity);
     }
+
+    public void save(int id, String name, String manaCost, String text, String power, String toughness, String loyalty, boolean isBasic){
+        CardEntity newCardEntity = new CardEntity(id, name, manaCost, text, power, toughness, loyalty, isBasic);
+        repository.updateCardEntity(newCardEntity);
+    }
 /*
     public void insertCardSupertype(String cardName, String supertype){
 //        if(!repository.getMapSupertypeToId().containsKey(supertype)){

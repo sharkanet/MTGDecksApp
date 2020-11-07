@@ -1,10 +1,16 @@
 package com.chris.mtgdecksapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -42,6 +48,7 @@ public class CardEditActivity extends AppCompatActivity {
     private List<SupertypeEntity> supertypeEntities = new ArrayList<>();
     private int cardId;
     private String cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty;
+    private boolean cardIsBasic;
     private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
@@ -83,7 +90,7 @@ public class CardEditActivity extends AppCompatActivity {
                 String cardLoyalty = loyaltyField.getText().toString().trim();
 
                 executor.execute(() -> {
-                    viewModel.save(cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty);
+                    viewModel.save(cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty, cardIsBasic);
                     supertypeNachoField.getAllChips().forEach(chip -> {
                         String supertypeName;
                         if (chip.getData() == null) {
@@ -212,7 +219,8 @@ public class CardEditActivity extends AppCompatActivity {
             cardText= extras.getString(CARD_TEXT_KEY);
             cardPower = extras.getString(CARD_POWER_KEY);
             cardToughness = extras.getString(CARD_TOUGHNESS_KEY);
-            cardLoyalty= extras.getString(CARD_LOYALTY_KEY);
+            cardLoyalty = extras.getString(CARD_LOYALTY_KEY);
+            cardIsBasic = extras.getBoolean(CARD_IS_BASIC);
 
         }
     }
@@ -229,16 +237,16 @@ public class CardEditActivity extends AppCompatActivity {
     }
 
     private void fillNachoView() {
-        // find a way to make these happen during load
+        // TODO find a way to make these happen during load
         viewModel.getCardTypeEntitiesList().forEach(cardTypeEntity -> {
-            System.out.println((cardTypeEntity.getTypeId_FK()) );
+    //        System.out.println((cardTypeEntity.getTypeId_FK()) );
             typeNachoField.append(viewModel.getMapIdToType().get(cardTypeEntity.getTypeId_FK()));
             typeNachoField.chipifyAllUnterminatedTokens();
-            System.out.println("Append" + viewModel.getMapIdToType().get(cardTypeEntity.getTypeId_FK()) );
+    //        System.out.println("Append" + viewModel.getMapIdToType().get(cardTypeEntity.getTypeId_FK()) );
         });
 
         viewModel.getCardSupertypeEntitiesList().forEach(cardSupertypeEntity -> {
-            System.out.println(cardSupertypeEntity.getSupertypeId_FK());
+     //       System.out.println(cardSupertypeEntity.getSupertypeId_FK());
             supertypeNachoField.append(viewModel.getMapIdToSupertype().get(cardSupertypeEntity.getSupertypeId_FK()));
             supertypeNachoField.chipifyAllUnterminatedTokens();
         });
@@ -292,12 +300,15 @@ public class CardEditActivity extends AppCompatActivity {
                 String cardLoyalty = loyaltyField.getText().toString().trim();
 
                 executor.execute(() -> {
-                    viewModel.save(cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty);
+                    viewModel.save(cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty, false);
                     supertypeNachoField.getAllChips().forEach(chip -> {
                         String supertypeName;
                         if (chip.getData() == null) {
                             supertypeName = chip.getText().toString();
                         } else supertypeName = (((SupertypeEntity) chip.getData()).getSupertype());
+                        if (supertypeName.equalsIgnoreCase("Basic")){
+                            viewModel.save(cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty, true);
+                        }
                         if (viewModel.getMapSupertypeToId().containsKey(supertypeName)) {
                             int chipId = viewModel.getMapSupertypeToId().get(supertypeName);
                             viewModel.insertCardSupertype((int) cardId, chipId);
@@ -323,6 +334,43 @@ public class CardEditActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        Toolbar toolbar = toolbarBinding.toolbar;
+        toolbar.inflateMenu(R.menu.detail_menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.delete:
+                AlertDialog.Builder builder = new AlertDialog.Builder(CardEditActivity.this);
+                builder.setMessage("Delete Card?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                viewModel.delete(cardId);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //cancel
+                                //do nothing
+                            }
+                        });
+                builder.create().show();
+                return  true;
+            case R.id.about:
+                Intent intent1 = new Intent(CardEditActivity.this, AboutActivity.class);
+                startActivity(intent1);
+                return true;
+            default:
+                return false;
+        }
     }
 
 }

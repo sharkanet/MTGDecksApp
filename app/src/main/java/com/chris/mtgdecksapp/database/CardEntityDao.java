@@ -44,4 +44,6 @@ public interface CardEntityDao {
     @Query("DELETE FROM card")
     void deleteAllCardEntity();
 
+    @Query("DELETE FROM card WHERE cardId =:cardId")
+    void deleteCardEntityById(int cardId);
 }

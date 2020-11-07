@@ -1,11 +1,14 @@
 package com.chris.mtgdecksapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.Observer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -59,8 +62,8 @@ public class CardAddActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         nameField = binding.editTextName;
         manaField = binding.editTextManaCost;
-       // supertypeField = binding.editTextSupertype;
-       // typeField = binding.editTextType;
+        // supertypeField = binding.editTextSupertype;
+        // typeField = binding.editTextType;
         supertypeNachoField = binding.nachoTextViewSupertype;
         typeNachoField = binding.nachoTextViewType;
         textField = binding.editTextText;
@@ -84,59 +87,64 @@ public class CardAddActivity extends AppCompatActivity {
 
         //setup floating action button
         fab = binding.floatingActionButton;
-        fab.setOnClickListener(new View.OnClickListener(){
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 //TODO
                 String cardName = nameField.getText().toString().trim();
                 String cardMana = manaField.getText().toString().trim();
                 String cardText = textField.getText().toString().trim();
-                String cardPower =powerField.getText().toString().trim();
+                String cardPower = powerField.getText().toString().trim();
                 String cardToughness = toughnessField.getText().toString().trim();
                 String cardLoyalty = loyaltyField.getText().toString().trim();
 
-//                long cardId = viewModel.save(cardName, cardMana , cardText, cardPower, cardToughness, cardLoyalty);
-
-//todo
                 // handle types
                 // handle non existent
                 // handle validation
-                executor.execute(()->{
-                    long cardId = viewModel.save(cardName, cardMana , cardText, cardPower, cardToughness, cardLoyalty);
-                    supertypeNachoField.getAllChips().forEach( chip -> {
-  // need something to handle unrecognized entries //hey it works!
+                executor.execute(() -> {
+                    long cardId = viewModel.save(cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty);
+                    supertypeNachoField.getAllChips().forEach(chip -> {
                         String supertypeName;
-                        if(chip.getData() == null){
+                        if (chip.getData() == null) {
                             supertypeName = chip.getText().toString();
-                        } else supertypeName =(((SupertypeEntity) chip.getData()).getSupertype());
-                        if(mapSupertypeToId.containsKey(supertypeName)){
+                        } else supertypeName = (((SupertypeEntity) chip.getData()).getSupertype());
+                        if (supertypeName.equalsIgnoreCase("Basic")) {
+                            viewModel.save((int) cardId, cardName, cardMana, cardText, cardPower, cardToughness, cardLoyalty, true);
+                        }
+                        if (mapSupertypeToId.containsKey(supertypeName)) {
                             int chipId = mapSupertypeToId.get(supertypeName);
                             System.out.println("cardId is: " + cardId + "\n");
                             System.out.println(chipId);
-                            viewModel.insertCardSupertype((int)cardId, chipId);
+                            viewModel.insertCardSupertype((int) cardId, chipId);
                         } else {
                             long chipId = viewModel.insertSupertypeEntityWithReturn(new SupertypeEntity(supertypeName));
                             viewModel.insertCardSupertype((int) cardId, (int) chipId);
                         }
                     });
-                    typeNachoField.getAllChips().forEach( chip -> {
+                    typeNachoField.getAllChips().forEach(chip -> {
                         String typeName;
-                        if(chip.getData() == null){
+                        if (chip.getData() == null) {
                             typeName = chip.getText().toString();
-                        } else  typeName= (((TypeEntity) chip.getData()).getType());
-                        if(mapTypeToId.containsKey(typeName)){
+                        } else typeName = (((TypeEntity) chip.getData()).getType());
+                        if (mapTypeToId.containsKey(typeName)) {
                             int chipId = mapTypeToId.get(typeName);
-                            viewModel.insertCardType((int)cardId, chipId);
+                            viewModel.insertCardType((int) cardId, chipId);
                         } else {
                             long chipId = viewModel.insertTypeEntityWithReturn(new TypeEntity(typeName));
                             viewModel.insertCardType((int) cardId, (int) chipId);
                         }
                     });
                 });
+                finish();
+            }
+        });
+    }
+
+/**
 //                viewModel.loadCard(cardName);
 //                int cardId = viewModel.getCardEntity().getValue().getCardId();
 //                int cardId = mapCardToId.get(cardName);
-/* WHAT AM I DOING???? //TODO
+/* WHAT AM I DOING????
                 viewModel.getCardEntity().observe(CardAddActivity.this, cardEntity -> {
                     if(cardEntity!=null){
                         cardId = cardEntity.getCardId();            }
@@ -162,27 +170,24 @@ public class CardAddActivity extends AppCompatActivity {
                     } else{
                         System.out.println("not found");
                     }
-                }); */
+                });
 /*
                 supertypeNachoField.getAllChips().forEach( chip -> {
                         System.out.println("cardId is: "+cardId+"\n");
                         System.out.println(mapSupertypeToId.get(((SupertypeEntity)chip.getData()).getSupertype()));
                       //  viewModel.insertCardSupertype(cardId, mapSupertypeToId.get(((SupertypeEntity)chip.getData()).getSupertype()));
-                }); */
+                });
 //                typeNachoField.getAllChips().forEach(chip -> {
 //                    viewModel.insertCardType(cardName, ((TypeEntity)chip.getData()).getType());
 //                });
 //???????????                viewModel.getCardEntitiesPostAdd().removeObserver(cardObserver);
-                finish();
-            }
-        });
 
 //        powerField.setOnClickListener( v->{
 //            Intent intent = new Intent(CardAddActivity.this, AddCardSupertypeActivity.class);
 //            startActivity(intent);
 //        });
+*/
 
-    }
 
     private void initNachoView() {
         typeNachoField = binding.nachoTextViewType;
@@ -246,4 +251,26 @@ public class CardAddActivity extends AppCompatActivity {
         };
         viewModel.getCardEntities().observe(this, cardObserver);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        Toolbar toolbar = toolbarBinding.toolbar;
+        toolbar.inflateMenu(R.menu.basic_menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            //todo
+            // manage types/supertypes?
+            case R.id.about:
+                Intent intent= new Intent(CardAddActivity.this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

@@ -52,6 +52,11 @@ public class CardEditViewModel extends AndroidViewModel {
         repository.updateCardEntity(newCardEntity);
     }
 
+    public void save(int id, String name, String manaCost, String text, String power, String toughness, String loyalty, boolean isBasic){
+        CardEntity newCardEntity = new CardEntity(id, name, manaCost, text, power, toughness, loyalty, isBasic);
+        repository.updateCardEntity(newCardEntity);
+    }
+
     public LiveData<List<TypeEntity>> getTypeEntities() {
         return typeEntities;
     }
@@ -126,5 +131,9 @@ public class CardEditViewModel extends AndroidViewModel {
     public void deleteCardTypeAndSupertypes(int id){
         repository.deleteCardTypeEntitiesForCardId(id);
         repository.deleteCardSupertypeEntitiesForCardId(id);
+    }
+
+    public void delete(int cardId){
+        repository.deleteCardEntityById(cardId);
     }
 }

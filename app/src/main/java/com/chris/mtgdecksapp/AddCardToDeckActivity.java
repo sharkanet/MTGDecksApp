@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -9,9 +10,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.IS_COMMANDER_KEY;
 
 public class AddCardToDeckActivity extends AppCompatActivity implements CardQuantityDialogFragment.CardQuantityDialogListener, CardQuantityDialogFragment.QuantityPass {
     private ActivityAddCardToDeckBinding binding;
@@ -39,8 +43,9 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     private AddCardToDeckViewModel viewModel;
     private SearchView searchView;
     private List<CardEntity> cards = new ArrayList<>();
+    private List<CardInDeckEntity> cardInDeckEntities = new ArrayList<>();
     private int deckId, cardId, quantity;
-    private boolean inDeck = true;
+    private boolean inDeck = true, isCommanderDeck, selectedCardBasic;
     private String cardName;
 
     @Override
@@ -92,6 +97,11 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     }
 
     private void initViewModel() {
+        final Observer<List<CardInDeckEntity>> cardInDeckObserver = newCardInDecks ->{
+            cardInDeckEntities.clear();
+            cardInDeckEntities.addAll(newCardInDecks);
+        };
+
         final Observer<List<CardEntity>> cardObserver = newCards ->{
             cards.clear();
             cards.addAll(newCards);
@@ -103,30 +113,37 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
                 adapter.updateCardsFull();
             }
         };
+
         viewModel = new ViewModelProvider(this).get(AddCardToDeckViewModel.class);
         Bundle extras = getIntent().getExtras();
         if(extras == null){
             System.out.println("something went wrong - should never be called - DeckDetailActivity.InitViewModel()");
         } else {
             deckId = extras.getInt(DECK_ID_KEY);
+            isCommanderDeck = extras.getBoolean(IS_COMMANDER_KEY);
             viewModel.loadDeck(deckId);
         }
         viewModel.getAllCardEntity().observe(this, cardObserver);
+        viewModel.getAllCardInDeckEntity().observe(this, cardInDeckObserver);
         adapter.setOnCardClickListener(card -> {
-            Toast toast=Toast.makeText(getApplicationContext(), card + " button", Toast.LENGTH_SHORT );
-            toast.show();
-            //TODO
             this.cardId = card.getCardId();
             this.cardName = card.getName();
+            this.quantity = 0;
+            this.selectedCardBasic = card.isBasic();
+            for(CardInDeckEntity cardInDeckEntity: cardInDeckEntities){
+                if(cardInDeckEntity.getDeckId_FK()==deckId && cardInDeckEntity.getCardId_FK() == cardId){
+                    quantity = cardInDeckEntity.getQuantity();
+                }
+            }
             // add the card to the deck
-            // pop up for quantity
+            // pop up for quantity to add
             showQuantityDialog();
        });
     }
 
     @Override
     public void quantityPass(int quantity) {
-        this.quantity=quantity;
+        this.quantity=this.quantity+quantity;
     }
 
     public void showQuantityDialog(){
@@ -135,12 +152,22 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     }
 
     public void onDialogPositiveClick(DialogFragment dialogFragment){
-        /// TODO
-        //save
-        viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
-        Toast toast=Toast.makeText(getApplicationContext(), "Added "+quantity+" "+ cardName+" to deck.", Toast.LENGTH_SHORT );
-        toast.show();
+        // TODO sanity check?
+        // validate number for edh
+        if(isCommanderDeck && !selectedCardBasic && quantity > 1){
+            //error
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddCardToDeckActivity.this);
+            builder.setMessage("Commander deck can only have one of each nonbasic card.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                    });
 
+            builder.create().show();
+        }else
+        //save
+            viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
     }
     public void onDialogNegativeClick(DialogFragment dialogFragment){
         //do nothing
@@ -149,9 +176,20 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        //Todo
         Toolbar toolbar = toolbarBinding.toolbar;
-        toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.inflateMenu(R.menu.basic_menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.about:
+                Intent intent= new Intent(AddCardToDeckActivity.this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return false;
+        }
     }
 }

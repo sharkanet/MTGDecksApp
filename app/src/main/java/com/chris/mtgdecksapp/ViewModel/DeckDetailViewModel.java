@@ -40,6 +40,10 @@ public class DeckDetailViewModel extends AndroidViewModel {
         this.cardsInDeck = cardsInDeck;
     }
 
+    public void deleteDeck(int id){
+        repository.deleteDeckById(id);
+    }
+
     public Integer getWinCountForDeck(int id){
         return repository.getWinCountForDeck(id);
     }

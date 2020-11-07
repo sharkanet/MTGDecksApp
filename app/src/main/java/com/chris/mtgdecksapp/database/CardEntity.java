@@ -20,6 +20,7 @@ public class CardEntity {
     private String power;
     private String toughness;
     private String loyalty;
+    private boolean isBasic;
 
 @Ignore
     public CardEntity(){
@@ -49,6 +50,7 @@ public class CardEntity {
         this.loyalty = loyalty;
     }
 
+@Ignore
     public CardEntity(int cardId, String name, String manaCost, String text, String power, String toughness, String loyalty) {
         this.cardId = cardId;
         this.name = name;
@@ -57,6 +59,17 @@ public class CardEntity {
         this.power = power;
         this.toughness = toughness;
         this.loyalty = loyalty;
+    }
+
+    public CardEntity(int cardId, String name, String manaCost, String text, String power, String toughness, String loyalty, boolean isBasic) {
+        this.cardId = cardId;
+        this.name = name;
+        this.manaCost = manaCost;
+        this.text = text;
+        this.power = power;
+        this.toughness = toughness;
+        this.loyalty = loyalty;
+        this.isBasic = isBasic;
     }
 
 
@@ -115,6 +128,14 @@ public class CardEntity {
 
     public void setLoyalty(String loyalty) {
         this.loyalty = loyalty;
+    }
+
+    public boolean isBasic() {
+        return isBasic;
+    }
+
+    public void setBasic(boolean basic) {
+        isBasic = basic;
     }
 
     @NonNull

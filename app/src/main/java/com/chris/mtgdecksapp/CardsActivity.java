@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -111,7 +112,6 @@ public class CardsActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(CardsViewModel.class);
         viewModel.getAllCardEntity().observe(this, cardObserver);
         adapter.setOnCardClickListener(card -> {
-            //TODO
             Intent intent = new Intent(CardsActivity.this, CardEditActivity.class);
             intent.putExtra(CARD_ID_KEY, card.getCardId());
             intent.putExtra(CARD_NAME_KEY, card.getName());
@@ -120,15 +120,28 @@ public class CardsActivity extends AppCompatActivity {
             intent.putExtra(CARD_POWER_KEY, card.getPower());
             intent.putExtra(CARD_TOUGHNESS_KEY, card.getToughness());
             intent.putExtra(CARD_LOYALTY_KEY, card.getLoyalty());
+            intent.putExtra(CARD_IS_BASIC, card.isBasic());
             startActivity(intent);
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        //Todo
         Toolbar toolbar = toolbarBinding.toolbar;
-        toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.inflateMenu(R.menu.basic_menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.about:
+                Intent intent= new Intent(CardsActivity.this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

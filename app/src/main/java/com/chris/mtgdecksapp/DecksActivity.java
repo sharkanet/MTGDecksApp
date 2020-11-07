@@ -12,24 +12,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.chris.mtgdecksapp.UI.DecksAdapter;
-import com.chris.mtgdecksapp.UI.NewItemDecoration;
 import com.chris.mtgdecksapp.ViewModel.DecksViewModel;
 import com.chris.mtgdecksapp.database.DeckEntity;
 import com.chris.mtgdecksapp.databinding.ActivityDecksBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
-import com.chris.mtgdecksapp.utility.Constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
-import static com.chris.mtgdecksapp.utility.Constants.DECK_WINS_KEY;
+import static com.chris.mtgdecksapp.utility.Constants.IS_COMMANDER_KEY;
 
 public class DecksActivity extends AppCompatActivity {
     private ActivityDecksBinding binding;
@@ -60,7 +56,7 @@ public class DecksActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
-                    Intent intent = new Intent(DecksActivity.this, DeckAdd_Activity.class);
+                    Intent intent = new Intent(DecksActivity.this, DeckAddActivity.class);
                     startActivity(intent);
         }
         });
@@ -93,21 +89,30 @@ public class DecksActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(DecksViewModel.class);
         viewModel.getAllDecks().observe(this, deckObserver);
         adapter.setOnDeckClickListener(deck -> {
-            //TODO
-                Toast toast=Toast.makeText(getApplicationContext(), deck + " button", Toast.LENGTH_SHORT );
-                toast.show();
                 Intent intent = new Intent(DecksActivity.this, DeckDetailActivity.class);
                 intent.putExtra(DECK_ID_KEY, deck.getDeckId());
                 intent.putExtra(DECK_NAME_KEY, deck.getName());
+                intent.putExtra(IS_COMMANDER_KEY, deck.isCommanderDeck());
                 startActivity(intent);
         });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         Toolbar toolbar = toolbarBinding.toolbar;
-        toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.inflateMenu(R.menu.basic_menu);
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.about:
+                Intent intent= new Intent(DecksActivity.this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                 return false;
+    }
+    }
 
 }

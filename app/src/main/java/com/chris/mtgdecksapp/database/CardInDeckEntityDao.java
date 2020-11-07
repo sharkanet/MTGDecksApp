@@ -40,5 +40,7 @@ public interface CardInDeckEntityDao {
     @Query("DELETE FROM cardInDeck")
     void deleteAllCardInDeckEntity();
 
-
+    //delete by card and deck
+    @Query("DELETE FROM cardInDeck WHERE cardId_FK =:cardId AND deckId_FK =:deckId")
+    void deleteCardInDeckEntityById(int cardId, int deckId);
 }
