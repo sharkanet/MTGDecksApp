@@ -34,7 +34,7 @@ import java.util.List;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.IS_COMMANDER_KEY;
 
-public class AddCardToDeckActivity extends AppCompatActivity implements CardQuantityDialogFragment.CardQuantityDialogListener, CardQuantityDialogFragment.QuantityPass {
+public class AddCardToDeckActivity extends AppCompatActivity implements CardQuantityDialogFragment.CardQuantityDialogListener, CardQuantityDialogFragment.QuantityPass, CmdQuantityAlertDialogFragment.CmdQuantityDialogListener {
     private ActivityAddCardToDeckBinding binding;
     private ToolbarBinding toolbarBinding;
     private FloatingActionButton fab;
@@ -155,24 +155,41 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
         // TODO sanity check?
         // validate number for edh
         if(isCommanderDeck && !selectedCardBasic && quantity > 1){
-            //error
-            AlertDialog.Builder builder = new AlertDialog.Builder(AddCardToDeckActivity.this);
-            builder.setMessage("Commander deck can only have one of each nonbasic card.")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                    });
-
-            builder.create().show();
+//            //error
+//            AlertDialog.Builder builder = new AlertDialog.Builder(AddCardToDeckActivity.this);
+//            builder.setMessage("Commander should only have one of each nonbasic card.")
+//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                }
+//                    });
+//            builder.create().show();
+            showCmdQuantityAlert();
         }else
         //save
             viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
     }
+
+
+
     public void onDialogNegativeClick(DialogFragment dialogFragment){
         //do nothing
     }
 
+    private void showCmdQuantityAlert() {
+        DialogFragment dialogFragment = new CmdQuantityAlertDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "CmdQuantityAlertDialogFragment");
+    }
+    @Override
+    public void onCmdQuantityDialogPositiveClick(DialogFragment dialog) {
+        viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
+
+    }
+
+    @Override
+    public void onCmdQuantityDialogNegativeClick(DialogFragment dialog) {
+        //do nothing
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

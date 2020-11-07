@@ -3,6 +3,7 @@ package com.chris.mtgdecksapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.chris.mtgdecksapp.ViewModel.EditCardInDeckViewModel;
+import com.chris.mtgdecksapp.database.CardInDeckEntity;
 import com.chris.mtgdecksapp.databinding.ActivityEditCardInDeckBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,11 +25,11 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import static com.chris.mtgdecksapp.utility.Constants.*;
 
-public class EditCardInDeckActivity extends AppCompatActivity {
+public class EditCardInDeckActivity extends AppCompatActivity implements CmdQuantityAlertDialogFragment.CmdQuantityDialogListener {
     private ActivityEditCardInDeckBinding binding;
     private ToolbarBinding toolbarBinding;
     private String cardName, cardText;
-    private int deckId, cardId, quantityOriginal;
+    private int deckId, cardId, quantityOriginal, quantity;
     private boolean inDeck, isBasic, isCommanderDeck;
     private TextView cardNameField, cardTextField;
     private TextInputEditText cardQuantityField;
@@ -55,7 +57,7 @@ public class EditCardInDeckActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int quantity = quantityOriginal;
+                quantity = quantityOriginal;
                 // check quantity field
                 try{
                     quantity = Integer.valueOf(cardQuantityField.getText().toString().trim());
@@ -66,58 +68,36 @@ public class EditCardInDeckActivity extends AppCompatActivity {
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    return;
+
                                 }
                             });
                     builder.create().show();
+                    return;
                 } catch (NullPointerException e){
                     AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
                     builder.setMessage("Error in quantity field.")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    return;
                                 }
                             });
                     builder.create().show();
+                    return;
                 }
 
                 if(isCommanderDeck && !isBasic && quantity > 1){
-                    //error
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
-                    builder.setMessage("Commander deck can only have one of each nonbasic card.")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                            });
-
-                    builder.create().show();
-                }else
-
-                try {
-                    if(quantity == 0){
-                        confirmDelete();
-                    }else if(buttonIn.isChecked()) {
-                        viewModel.save(cardId, deckId, quantity, true);
-                        finish();
-                    } else if(buttonOut.isChecked()){
-                        viewModel.save(cardId, deckId, quantity, false);
-                        finish();
-                    } else {
-                        //  todo
-                        throw new Exception("Unknown Error");
-                    }
-                } catch (Exception e){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
-                    builder.setMessage("Error!")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            });
-                    builder.create().show();
+                    //error message
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
+//                    builder.setMessage("Commander deck should only have one of each nonbasic card.")
+//                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                }
+//                            });
+//                    builder.create().show();
+                    showCmdQuantityAlert();
+                } else {
+                    save();
                 }
             }
         });
@@ -191,5 +171,46 @@ public class EditCardInDeckActivity extends AppCompatActivity {
                     }
                 });
         builder.create().show();
+    }
+
+    private void showCmdQuantityAlert() {
+        DialogFragment dialogFragment = new CmdQuantityAlertDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "CmdQuantityAlertDialogFragment");
+    }
+    @Override
+    public void onCmdQuantityDialogPositiveClick(DialogFragment dialog) {
+        save();
+    }
+
+    @Override
+    public void onCmdQuantityDialogNegativeClick(DialogFragment dialog) {
+        //do nothing
+    }
+
+    private void save(){
+        try {
+            if(quantity == 0){
+                confirmDelete();
+            }else if(buttonIn.isChecked()) {
+                viewModel.save(cardId, deckId, quantity, true);
+                finish();
+            } else if(buttonOut.isChecked()){
+                viewModel.save(cardId, deckId, quantity, false);
+                finish();
+            } else {
+                //  todo
+                throw new Exception("Unknown Error");
+            }
+        } catch (Exception e){
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditCardInDeckActivity.this);
+            builder.setMessage("Error!")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            builder.create().show();
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.chris.mtgdecksapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.PrimaryKey;
@@ -30,7 +31,7 @@ import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.DECK_NAME_KEY;
 import static com.chris.mtgdecksapp.utility.Constants.IS_COMMANDER_KEY;
 
-public class DeckEditActivity extends AppCompatActivity {
+public class DeckEditActivity extends AppCompatActivity implements CmdDeckAlertDialogFragment.CmdDeckDialogListener {
     private ActivityDeckAddBinding binding;
     private CheckBox checkBox;
     private TextInputEditText nameField;
@@ -88,24 +89,30 @@ public class DeckEditActivity extends AppCompatActivity {
                 } else if(checkBox.isChecked() && containsNonBasicDuplicates() ){
                     // check cards in deck for dupes
                     // error
-                    AlertDialog.Builder builder = new AlertDialog.Builder(DeckEditActivity.this);
-                    builder.setMessage("Commander deck can only have one of each nonbasic card. \nRemove duplicate nonbasic cards before registering as Commander deck.")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                            });
-
-                    builder.create().show();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(DeckEditActivity.this);
+//                    builder.setMessage("Commander deck can only have one of each nonbasic card. \nRemove duplicate nonbasic cards before registering as Commander deck.")
+//                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                }
+//                            });
+//
+//                    builder.create().show();
+                    DialogFragment dialogFragment = new CmdDeckAlertDialogFragment();
+                    dialogFragment.show(getSupportFragmentManager(), "CmdDeckAlertDialogFragment");
                 } else {
-                    viewModel.save(deckId, nameField.getText().toString().trim(), checkBox.isChecked());
-                    Intent intent = new Intent(DeckEditActivity.this, DecksActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    save();
                 }
             }
         });
 
+    }
+
+    private void save() {
+        viewModel.save(deckId, nameField.getText().toString().trim(), checkBox.isChecked());
+        Intent intent = new Intent(DeckEditActivity.this, DecksActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void initViewModel() {
@@ -145,5 +152,16 @@ public class DeckEditActivity extends AppCompatActivity {
         }
         return false;
     };
+
+    @Override
+    public void onCmdDeckDialogPositiveClick(DialogFragment dialog) {
+        save();
+    }
+
+    @Override
+    public void onCmdDeckDialogNegativeClick(DialogFragment dialog) {
+        //do nothing
+    }
+
 
 }

@@ -276,6 +276,8 @@ public class CardEditActivity extends AppCompatActivity {
                 binding.textViewSupertype.setText("Card Supertypes:");
                 binding.textViewSupertype.setOnClickListener(null);
                 binding.textViewType.setOnClickListener(null);
+                supertypeNachoField.setOnClickListener(null);
+                typeNachoField.setOnClickListener(null);
                 setupAlternateFAB();
             }
         };
