@@ -6,6 +6,8 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "game",
@@ -20,7 +22,26 @@ public class GameEntity {
     private String opponent;
     private String opponentDeckName;
     private String result;
+    private Date gameTime;
 
+    public GameEntity(int gameId, int deckId_FK, String opponent, String opponentDeckName, String result, Date gameTime) {
+        this.gameId = gameId;
+        this.deckId_FK = deckId_FK;
+        this.opponent = opponent;
+        this.opponentDeckName = opponentDeckName;
+        this.result = result;
+        this.gameTime = gameTime;
+    }
+@Ignore
+    public GameEntity(int deckId_FK, String opponent, String opponentDeckName, String result, Date gameTime) {
+        this.deckId_FK = deckId_FK;
+        this.opponent = opponent;
+        this.opponentDeckName = opponentDeckName;
+        this.result = result;
+        this.gameTime = gameTime;
+    }
+
+@Ignore
     public GameEntity(int gameId, int deckId_FK, String opponent, String opponentDeckName, String result) {
         this.gameId = gameId;
         this.deckId_FK = deckId_FK;
@@ -77,5 +98,13 @@ public class GameEntity {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public Date getGameTime() {
+        return gameTime;
+    }
+
+    public void setGameTime(Date gameTime) {
+        this.gameTime = gameTime;
     }
 }

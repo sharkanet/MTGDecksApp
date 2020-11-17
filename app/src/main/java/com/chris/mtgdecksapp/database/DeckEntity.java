@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(tableName = "deck")
 
 public class DeckEntity {
@@ -56,5 +58,20 @@ public class DeckEntity {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeckEntity that = (DeckEntity) o;
+        return getDeckId() == that.getDeckId() &&
+                isCommanderDeck() == that.isCommanderDeck() &&
+                Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDeckId(), getName(), isCommanderDeck());
     }
 }

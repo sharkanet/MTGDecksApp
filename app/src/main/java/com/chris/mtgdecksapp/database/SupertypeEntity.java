@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(tableName = "supertype")
 public class SupertypeEntity {
     @PrimaryKey(autoGenerate = true)
@@ -45,5 +47,19 @@ public class SupertypeEntity {
     @Override
     public String toString() {
         return supertype;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SupertypeEntity that = (SupertypeEntity) o;
+        return getSupertypeId() == that.getSupertypeId() &&
+                Objects.equals(getSupertype(), that.getSupertype());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSupertypeId(), getSupertype());
     }
 }

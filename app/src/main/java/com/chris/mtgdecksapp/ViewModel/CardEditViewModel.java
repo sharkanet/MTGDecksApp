@@ -12,6 +12,8 @@ import com.chris.mtgdecksapp.database.CardTypeEntity;
 import com.chris.mtgdecksapp.database.MTGAppRepository;
 import com.chris.mtgdecksapp.database.SupertypeEntity;
 import com.chris.mtgdecksapp.database.TypeEntity;
+import com.chris.mtgdecksapp.model.CardSupertype;
+import com.chris.mtgdecksapp.model.CardType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,14 +24,20 @@ public class CardEditViewModel extends AndroidViewModel {
     private MTGAppRepository repository;
     private LiveData<List<TypeEntity>> typeEntities;
     private LiveData<List<SupertypeEntity>> supertypeEntities;
-    private LiveData<List<CardTypeEntity>> cardTypeEntities;
-    private LiveData<List<CardSupertypeEntity>> cardSupertypeEntities;
-    private List<CardTypeEntity> cardTypeEntitiesList = new ArrayList<>();
-    private List<CardSupertypeEntity> cardSupertypeEntitiesList = new ArrayList<>();
+//    private LiveData<List<CardTypeEntity>> cardTypeEntities;
+//    private LiveData<List<CardSupertypeEntity>> cardSupertypeEntities;
+//    private List<CardTypeEntity> cardTypeEntitiesList = new ArrayList<>();
+//    private List<CardSupertypeEntity> cardSupertypeEntitiesList = new ArrayList<>();
     private Map<String, Integer> mapSupertypeToId = new HashMap<>();
     private Map<String, Integer> mapTypeToId = new HashMap<>();
     private Map<Integer, String> mapIdToSupertype = new HashMap<>();
     private Map<Integer, String> mapIdToType = new HashMap<>();
+    private LiveData<List<CardType>> cardTypes;
+    private LiveData<List<CardSupertype>> cardSupertypes;
+    private List<CardType> cardTypesList = new ArrayList<>();
+    private List<CardSupertype> cardSupertypesList = new ArrayList<>();
+    private boolean typeNachoFilled = false, supertypeNachoFilled = false;
+
 //    private Executor executor = Executors.newSingleThreadExecutor();
 
     public CardEditViewModel(@NonNull Application application){
@@ -37,14 +45,18 @@ public class CardEditViewModel extends AndroidViewModel {
         repository = MTGAppRepository.getInstance(application.getApplicationContext());
         typeEntities = repository.getAllTypeEntity();
         supertypeEntities = repository.getAllSuperTypeEntity();
-        cardTypeEntities = repository.getAllCardTypeEntity();
-        cardSupertypeEntities = repository.getAllCardSupertypeEntity();
+//        cardTypeEntities = repository.getAllCardTypeEntity();
+//        cardSupertypeEntities = repository.getAllCardSupertypeEntity();
 
     }
 
     public void loadCard(int id){
-        cardSupertypeEntities = repository.getCardSupertypeForCardId(id);
-        cardTypeEntities = repository.getCardTypeForCardId(id);
+//        cardSupertypeEntities = repository.getCardSupertypeForCardId(id);
+//        cardTypeEntities = repository.getCardTypeForCardId(id);
+        cardTypes = repository.getCardTypesForCardId(id);
+        cardSupertypes = repository.getCardSupertypesForCardId(id);
+//        cardTypesList = repository.getCardTypesListForCardId(id);
+//        cardSupertypesList = repository.getCardSupertypeListForCardId(id);
     }
 
     public void save(int id, String name, String manaCost, String text, String power, String toughness, String loyalty){
@@ -65,30 +77,25 @@ public class CardEditViewModel extends AndroidViewModel {
         return supertypeEntities;
     }
 
-    public LiveData<List<CardTypeEntity>> getCardTypeEntities() {
-        return cardTypeEntities;
-    }
+//    public LiveData<List<CardTypeEntity>> getCardTypeEntities() {
+//        return cardTypeEntities;
+//    }
+//
+//    public LiveData<List<CardSupertypeEntity>> getCardSupertypeEntities() {
+//        return cardSupertypeEntities;
+//    }
+//
+//
+//    public List<CardTypeEntity> getCardTypeEntitiesList() {
+//        return cardTypeEntitiesList;
+//    }
+//
+//
+//    public List<CardSupertypeEntity> getCardSupertypeEntitiesList() {
+//        return cardSupertypeEntitiesList;
+//    }
 
-    public LiveData<List<CardSupertypeEntity>> getCardSupertypeEntities() {
-        return cardSupertypeEntities;
-    }
 
-
-    public List<CardTypeEntity> getCardTypeEntitiesList() {
-        return cardTypeEntitiesList;
-    }
-
-    public void setCardTypeEntitiesList(List<CardTypeEntity> cardTypeEntitiesList) {
-        this.cardTypeEntitiesList = cardTypeEntitiesList;
-    }
-
-    public List<CardSupertypeEntity> getCardSupertypeEntitiesList() {
-        return cardSupertypeEntitiesList;
-    }
-
-    public void setCardSupertypeEntitiesList(List<CardSupertypeEntity> cardSupertypeEntitiesList) {
-        this.cardSupertypeEntitiesList = cardSupertypeEntitiesList;
-    }
 
     public List<CardTypeEntity> getListCardTypeForCardId(int id){
         return repository.getListCardTypeForCardId(id);
@@ -133,7 +140,39 @@ public class CardEditViewModel extends AndroidViewModel {
         repository.deleteCardSupertypeEntitiesForCardId(id);
     }
 
+    public LiveData<List<CardType>> getCardTypes() {
+        return cardTypes;
+    }
+
+    public LiveData<List<CardSupertype>> getCardSupertypes() {
+        return cardSupertypes;
+    }
+
+    public List<CardType> getCardTypesList() {
+        return cardTypesList;
+    }
+
+    public List<CardSupertype> getCardSupertypesList() {
+        return cardSupertypesList;
+    }
+
     public void delete(int cardId){
         repository.deleteCardEntityById(cardId);
+    }
+
+    public boolean isTypeNachoFilled() {
+        return typeNachoFilled;
+    }
+
+    public void setTypeNachoFilled(boolean typeNachoFilled) {
+        this.typeNachoFilled = typeNachoFilled;
+    }
+
+    public boolean isSupertypeNachoFilled() {
+        return supertypeNachoFilled;
+    }
+
+    public void setSupertypeNachoFilled(boolean supertypeNachoFilled) {
+        this.supertypeNachoFilled = supertypeNachoFilled;
     }
 }

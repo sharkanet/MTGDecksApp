@@ -19,7 +19,7 @@ public class CmdQuantityAlertDialogFragment extends DialogFragment {
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Commander should only have one of each nonbasic card.")
+        builder.setMessage("Commander deck should only have one of each nonbasic card.")
                 .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {

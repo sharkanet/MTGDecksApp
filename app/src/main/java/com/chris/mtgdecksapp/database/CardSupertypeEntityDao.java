@@ -8,10 +8,12 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.chris.mtgdecksapp.utility.LiveDataTestUtil;
+
 import java.util.List;
 
 @Dao
-public interface CardSupertypeEntityDao {
+public interface CardSupertypeEntityDao{
     //insert
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCardSupertypeEntity(CardSupertypeEntity cardSupertypeEntity);

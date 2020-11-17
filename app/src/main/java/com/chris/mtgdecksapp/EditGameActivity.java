@@ -95,6 +95,14 @@ public class EditGameActivity extends AppCompatActivity {
                     repository.updateGameEntity(new GameEntity(gameId, deckId,opponent,opponentDeck,"Draw"));
                 else{
                     // todo error message
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditGameActivity.this);
+                    builder.setMessage("Select a result.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    builder.create().show();
                 }
                 finish();
             }

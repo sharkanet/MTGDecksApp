@@ -13,7 +13,7 @@ import com.chris.mtgdecksapp.DecksActivity;
 import com.chris.mtgdecksapp.R;
 import com.chris.mtgdecksapp.database.DeckEntity;
 import com.chris.mtgdecksapp.databinding.DecksListItemBinding;
-import com.chris.mtgdecksapp.model.Deck;
+
 
 import java.util.List;
 

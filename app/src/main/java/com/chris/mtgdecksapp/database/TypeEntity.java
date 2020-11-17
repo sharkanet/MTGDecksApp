@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(tableName = "type")
 
 public class TypeEntity {
@@ -45,5 +47,19 @@ public class TypeEntity {
     @Override
     public String toString() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TypeEntity that = (TypeEntity) o;
+        return getTypeId() == that.getTypeId() &&
+                Objects.equals(getType(), that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTypeId(), getType());
     }
 }

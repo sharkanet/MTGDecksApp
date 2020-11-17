@@ -6,15 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 
 import com.chris.mtgdecksapp.database.MTGAppRepository;
 import com.chris.mtgdecksapp.databinding.ActivityMainBinding;
 import com.chris.mtgdecksapp.databinding.ToolbarBinding;
-
-import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -61,17 +58,27 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         Toolbar toolbar = toolbarBinding.toolbar;
         toolbar.inflateMenu(R.menu.main_menu);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
+            case R.id.placeholder:
+                Intent intent= new Intent(MainActivity.this, ReportsActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.put_fake_data:
-                repository.putFakeData();
+                repository.initializeTestData();
                 return true;
             case R.id.clear_db:
                 repository.clearDB();
+                return true;
+            case R.id.about:
+                Intent intent1= new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent1);
+                return true;
             default:
                 return false;
         }

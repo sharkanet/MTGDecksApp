@@ -20,6 +20,8 @@ import com.chris.mtgdecksapp.databinding.ToolbarBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Date;
+
 import static com.chris.mtgdecksapp.utility.Constants.DECK_ID_KEY;
 
 public class RecordGameActivity extends AppCompatActivity {
@@ -57,15 +59,15 @@ public class RecordGameActivity extends AppCompatActivity {
                 if(opponentDeckField != null)
                     opponentDeck = opponentDeckField.getText().toString().trim();
                 if(radioButtonWin.isChecked()) {
-                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Win"));
+                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Win", new Date()));
                     returnToMain();
                 }
                 else if(radioButtonLose.isChecked()) {
-                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Lose"));
+                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Lose", new Date()));
                     returnToMain();
                 }
                 else if(radioButtonDraw.isChecked()) {
-                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Draw"));
+                    repository.insertGameEntity(new GameEntity(deckId, opponent, opponentDeck, "Draw", new Date()));
                     returnToMain();
                 }
                 else{

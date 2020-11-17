@@ -1,5 +1,6 @@
 package com.chris.mtgdecksapp.database;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -61,4 +62,6 @@ public class CardSupertypeEntity {
     public void setSupertypeId_FK(int supertypeId_FK) {
         this.supertypeId_FK = supertypeId_FK;
     }
+
+
 }

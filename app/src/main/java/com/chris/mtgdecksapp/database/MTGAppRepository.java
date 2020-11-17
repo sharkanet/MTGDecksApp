@@ -7,7 +7,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Query;
 
 import com.chris.mtgdecksapp.model.CardInDeck;
+import com.chris.mtgdecksapp.model.CardSupertype;
+import com.chris.mtgdecksapp.model.CardType;
+import com.chris.mtgdecksapp.model.Game;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,6 +45,8 @@ public class MTGAppRepository {
     private LiveData<List<TypeEntity>> allTypeEntity;
 
     private LiveData<List<CardInDeck>> cardsInDeck;
+    private LiveData<List<CardSupertype>> cardSupertypes;
+    private LiveData<List<CardType>> cardTypes;
 
 //    private Map<String, Integer> mapCardNameToId = new HashMap<>();
 //    private Map<String, Integer> mapTypeToId = new HashMap<>();
@@ -125,6 +134,13 @@ public class MTGAppRepository {
         return mtgAppDatabase.GameEntityDao().getLoseCountForDeck(id);
     }
 
+    public LiveData<List<Game>> getAllGamesOrderedByDate(){
+        return mtgAppDatabase.GameDao().getAllGamesOrderedByDate();
+    }
+    public LiveData<List<Game>> getAllGamesOrderedByWin() {
+        return mtgAppDatabase.GameDao().getAllGamesOrderedByWin();
+    }
+
     //retrieve lists of type and supertype for card id
     public LiveData<List<CardTypeEntity>> getCardTypeForCardId(int id){
         return mtgAppDatabase.CardTypeEntityDao().getCardTypeEntityForCardId(id);
@@ -137,6 +153,22 @@ public class MTGAppRepository {
     }
     public List<CardSupertypeEntity> getListCardSupertypeForCardId(int id){
         return mtgAppDatabase.CardSupertypeEntityDao().getListCardSupertypeEntityForCardId(id);
+    }
+    public LiveData<List<CardType>> getCardTypesForCardId(int id){
+//        cardTypes = mtgAppDatabase.CardTypeDao().getCardTypes(id);
+//        return cardTypes;
+        return mtgAppDatabase.CardTypeDao().getCardTypes(id);
+    }
+    public LiveData<List<CardSupertype>> getCardSupertypesForCardId(int id){
+//        cardSupertypes = mtgAppDatabase.CardSupertypeDao().getCardSupertypes(id);
+//        return cardSupertypes;
+        return mtgAppDatabase.CardSupertypeDao().getCardSupertypes(id);
+    }
+    public List<CardType> getCardTypesListForCardId(int id){
+        return mtgAppDatabase.CardTypeDao().getCardTypesList(id);
+    }
+    public List<CardSupertype> getCardSupertypeListForCardId(int id){
+        return mtgAppDatabase.CardSupertypeDao().getCardSupertypesList(id);
     }
 
 
@@ -429,15 +461,15 @@ public void deleteCardEntity(CardEntity cardEntity){
 
 
     //fake data
-    public void putFakeData(){
+    public void putTestData(){
        // clearDB();
-        insertDeckEntity(new DeckEntity(1,"placeholder 1", false));
-        insertDeckEntity(new DeckEntity(2,"placeholder 2", false));
+        insertDeckEntity(new DeckEntity(1,"Generic Deck", false));
+        insertDeckEntity(new DeckEntity(2,"Commander Deck", true));
         insertDeckEntity(new DeckEntity(3,"placeholder 3", false));
         insertDeckEntity(new DeckEntity(4, "commander deck", true));
-        insertCardEntity(new CardEntity(1, "placeholder 1", "{R}{R}{R}{3}","placeholder text 1", "n/a", "n/a", "n/a"));
-        insertCardEntity(new CardEntity(2, "placeholder 2", "{R}{G}{B}{7}","placeholder text 2 \n more text 2", "n/a", "n/a", "n/a"));
-        insertCardEntity(new CardEntity(3, "placeholder 3", "{W}{W}{W}{1}","placeholder text 3 IS VERY LONG!! \nanother \npotato", "n/a", "n/a", "n/a"));
+        insertCardEntity(new CardEntity(1, "Forest", "0","Forest", "n/a", "n/a", "n/a", true));
+        insertCardEntity(new CardEntity(2, "Jace", "{U}{U}{U}{3}","placeholder text 2 \n more text 2", "n/a", "n/a", "5", false));
+        insertCardEntity(new CardEntity(3, "Some Card", "{W}{B}{1}","placeholder text 3 IS VERY LONG!! \nanother \nline", "n/a", "n/a", "n/a", false));
         insertCardInDeckEntity(new CardInDeckEntity(1, 1, 1,true));
         insertCardInDeckEntity(new CardInDeckEntity(2, 1, 2,true));
         insertCardInDeckEntity(new CardInDeckEntity(2, 2, 2,true));
@@ -454,17 +486,76 @@ public void deleteCardEntity(CardEntity cardEntity){
         insertSupertypeEntity(new SupertypeEntity(8, "Sorcery"));
         insertSupertypeEntity(new SupertypeEntity(9, "Tribal"));
         insertSupertypeEntity(new SupertypeEntity(10, "Legendary"));
-        insertTypeEntity(new TypeEntity(1, "Human"));
-        insertTypeEntity(new TypeEntity(2, "Jace"));
-        insertTypeEntity(new TypeEntity(3, "Forest"));
-        insertTypeEntity(new TypeEntity(4, "Equipment"));
+        insertTypeEntity(new TypeEntity(1, "Forest"));
+        insertTypeEntity(new TypeEntity(2, "Plains"));
+        insertTypeEntity(new TypeEntity(3, "Island"));
+        insertTypeEntity(new TypeEntity(4, "Swamp"));
+        insertTypeEntity(new TypeEntity(5, "Mountain"));
+        insertTypeEntity(new TypeEntity(6, "Human"));
+        insertTypeEntity(new TypeEntity(7, "Jace"));
+        insertTypeEntity(new TypeEntity(8, "Equipment"));
+        insertCardSupertypeEntity(new CardSupertypeEntity(1,1));
+        insertCardSupertypeEntity(new CardSupertypeEntity(1,2));
+        insertCardSupertypeEntity(new CardSupertypeEntity(2,10));
+        insertCardSupertypeEntity(new CardSupertypeEntity(2,6));
+        insertCardSupertypeEntity(new CardSupertypeEntity(3,10));
+        insertCardSupertypeEntity(new CardSupertypeEntity(3,4));
+        insertCardTypeEntity(new CardTypeEntity(1,1));
+        insertCardTypeEntity(new CardTypeEntity(2,8));
+        insertCardTypeEntity(new CardTypeEntity(3,9));
         insertGameEntity(new GameEntity(1,1,"opponent", "opponent","Win"));
         insertGameEntity(new GameEntity(2,1,"opponent", "opponent","Win"));
         insertGameEntity(new GameEntity(3,2,"opponent", "opponent","Lose"));
 
+    }
 
-        System.out.println("put fake data");
-
+    public void initializeTestData(){
+        executor.execute(()->{
+            mtgAppDatabase.SupertypeEntityDao().deleteAllSupertypeEntity();
+            mtgAppDatabase.TypeEntityDao().deleteAllTypeEntity();
+            mtgAppDatabase.DeckEntityDao().deleteAllDeckEntity();
+            mtgAppDatabase.CardEntityDao().deleteAllCardEntity();
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(1, "Basic"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(2, "Land"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(3,"Creature"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(4,"Artifact"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(5,"Enchantment"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(6, "Planeswalker"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(7, "Instant"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(8, "Sorcery"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(9, "Tribal"));
+            mtgAppDatabase.SupertypeEntityDao().insertSupertypeEntity(new SupertypeEntity(10, "Legendary"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(1, "Forest"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(2, "Plains"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(3, "Island"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(4, "Swamp"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(5, "Mountain"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(6, "Human"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(7, "Jace"));
+            mtgAppDatabase.TypeEntityDao().insertTypeEntity(new TypeEntity(8, "Equipment"));
+            mtgAppDatabase.DeckEntityDao().insertDeckEntity(new DeckEntity(1,"Generic Deck", false));
+            mtgAppDatabase.DeckEntityDao().insertDeckEntity(new DeckEntity(2,"Commander Deck", true));
+            mtgAppDatabase.CardEntityDao().insertCardEntity(new CardEntity(1, "Forest", "0","{T}: Add {G} to mana pool", "n/a", "n/a", "n/a", true));
+            mtgAppDatabase.CardEntityDao().insertCardEntity(new CardEntity(2, "Jace", "{U}{U}{U}{3}","placeholder text \n more text", "n/a", "n/a", "5", false));
+            mtgAppDatabase.CardEntityDao().insertCardEntity(new CardEntity(3, "Some Card", "{W}{B}{1}","placeholder text 3\nanother \nline", "n/a", "n/a", "n/a", false));
+            mtgAppDatabase.CardSupertypeEntityDao().insertCardSupertypeEntity(new CardSupertypeEntity(1,1));
+            mtgAppDatabase.CardSupertypeEntityDao().insertCardSupertypeEntity(new CardSupertypeEntity(1,2));
+            mtgAppDatabase.CardSupertypeEntityDao().insertCardSupertypeEntity(new CardSupertypeEntity(2,10));
+            mtgAppDatabase.CardSupertypeEntityDao().insertCardSupertypeEntity(new CardSupertypeEntity(2,6));
+            mtgAppDatabase.CardSupertypeEntityDao().insertCardSupertypeEntity(new CardSupertypeEntity(3,10));
+            mtgAppDatabase.CardSupertypeEntityDao().insertCardSupertypeEntity(new CardSupertypeEntity(3,4));
+            mtgAppDatabase.CardTypeEntityDao().insertCardTypeEntity(new CardTypeEntity(1,1));
+            mtgAppDatabase.CardTypeEntityDao().insertCardTypeEntity(new CardTypeEntity(2,7));
+            mtgAppDatabase.CardTypeEntityDao().insertCardTypeEntity(new CardTypeEntity(3,8));
+            Calendar calendar = Calendar.getInstance();
+            mtgAppDatabase.GameEntityDao().insertGameEntity(new GameEntity(1,1,"Opponent", "Opponent Deck","Win", calendar.getTime()));
+            calendar.add(Calendar.MINUTE,10);
+            mtgAppDatabase.GameEntityDao().insertGameEntity(new GameEntity(2,1,"Opponent", "Opponent Deck B","Lose", calendar.getTime()));
+            calendar.add(Calendar.MINUTE,10);
+            mtgAppDatabase.GameEntityDao().insertGameEntity(new GameEntity(3,2,"Opponent", "Opponent Deck C","Lose", calendar.getTime()));
+            calendar.add(Calendar.MINUTE,10);
+            mtgAppDatabase.GameEntityDao().insertGameEntity(new GameEntity(4,2,"Guy", "Some Deck","Win", calendar.getTime()));
+        });
     }
 
 

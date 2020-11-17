@@ -154,19 +154,18 @@ public class AddCardToDeckActivity extends AppCompatActivity implements CardQuan
     public void onDialogPositiveClick(DialogFragment dialogFragment){
         // TODO sanity check?
         // validate number for edh
-        if(isCommanderDeck && !selectedCardBasic && quantity > 1){
-//            //error
-//            AlertDialog.Builder builder = new AlertDialog.Builder(AddCardToDeckActivity.this);
-//            builder.setMessage("Commander should only have one of each nonbasic card.")
-//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                }
-//                    });
-//            builder.create().show();
+//        if(isCommanderDeck && !selectedCardBasic && quantity > 1){
+//            showCmdQuantityAlert();
+//        }else
+//        //save
+//            viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
+        singletonValidator();
+    }
+
+    private void singletonValidator(){
+        if(isCommanderDeck && !selectedCardBasic && quantity > 1)
             showCmdQuantityAlert();
-        }else
-        //save
+        else
             viewModel.save(new CardInDeckEntity(cardId,deckId, quantity, inDeck));
     }
 
