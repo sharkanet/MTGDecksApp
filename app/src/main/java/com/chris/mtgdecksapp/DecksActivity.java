@@ -112,7 +112,7 @@ public class DecksActivity extends AppCompatActivity {
                 return true;
             default:
                  return false;
-    }
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Query;
 
+import com.chris.mtgdecksapp.R;
 import com.chris.mtgdecksapp.model.CardInDeck;
 import com.chris.mtgdecksapp.model.CardSupertype;
 import com.chris.mtgdecksapp.model.CardType;
@@ -19,6 +20,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static com.chris.mtgdecksapp.utility.Constants.PASSWORD;
+import static com.chris.mtgdecksapp.utility.Constants.USER;
 
 public class MTGAppRepository {
 //    private CardEntityDao cardEntityDao;
@@ -559,5 +563,26 @@ public void deleteCardEntity(CardEntity cardEntity){
     }
 
 
+    public LiveData<List<UserEntity>> getAllUsers() {
+        return mtgAppDatabase.UserEntityDao().getAllUserEntity();
+    }
 
+    public void insertUserEntity(UserEntity userEntity) {
+        executor.execute(()->{
+            mtgAppDatabase.UserEntityDao().insertUserEntity(userEntity);
+        });
+    }
+
+    public void updateUserEntity(UserEntity userEntity){
+        executor.execute(()->{
+            mtgAppDatabase.UserEntityDao().updateUserEntity(userEntity);
+        });
+    }
+
+    public void clearUserEntity(){
+        executor.execute(()->{
+            mtgAppDatabase.UserEntityDao().deleteAllUserEntity();
+            mtgAppDatabase.UserEntityDao().insertUserEntity(new UserEntity(1,USER,PASSWORD));
+        });
+    }
 }

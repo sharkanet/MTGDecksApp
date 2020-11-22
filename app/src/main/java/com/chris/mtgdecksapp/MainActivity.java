@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.clear_db:
                 repository.clearDB();
                 return true;
+            case R.id.change_login:
+                Intent intent2= new Intent(MainActivity.this, ChangeLoginActivity.class);
+                startActivity(intent2);
+                return true;
             case R.id.about:
                 Intent intent1= new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent1);

@@ -22,5 +22,7 @@ public class Constants {
     public static final String OPPONENT_DECK_KEY = "opponent_deck_key";
     public static final String RESULT_KEY = "result_key";
     public static final String IS_COMMANDER_KEY = "is_commander_key";
+    public static final String USER = "User";
+    public static final String PASSWORD = "Password";
 
 }
